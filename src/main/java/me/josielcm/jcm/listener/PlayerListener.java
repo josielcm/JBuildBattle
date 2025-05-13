@@ -33,6 +33,10 @@ public class PlayerListener implements Listener {
             player.setGameMode(GameMode.ADVENTURE);
         }
 
+        if (JBuildBattle.getInstance().getGameManager().isGlow()) {
+            player.setGlowing(true);
+        }
+
         PlayerManager.onJoin(player);
         BossBarManager.addPlayer(player);
         ev.joinMessage(Color.parse("<gold>¡" + player.getName() + " se ha unido a la partida!"));

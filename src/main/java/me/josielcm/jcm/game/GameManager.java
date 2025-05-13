@@ -48,6 +48,10 @@ public class GameManager {
     @Setter
     private boolean canLeaveZone = false;
 
+    @Getter
+    @Setter
+    private boolean glow = false;
+
     public GameManager() {
         this.gameTheme = GameTheme.NONE;
         this.gameState = GameState.WAITING;
@@ -164,6 +168,35 @@ public class GameManager {
         changeGameMode(GameMode.ADVENTURE);
         BossBarManager.removeAllPlayers();
         PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BELL, 1.0f, 0.8f);
+    }
+
+    public void toggleGlow() {
+        glow = !glow;
+        Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+
+        if (players.isEmpty()) {
+            return;
+        }
+
+        final List<Player> playerList = new ArrayList<>(players);
+        final int[] index = { 0 };
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (index[0] >= playerList.size()) {
+                    this.cancel();
+                    return;
+                }
+
+                Player player = playerList.get(index[0]);
+                if (player != null && player.isOnline()) {
+                    player.setGlowing(glow);
+                }
+
+                index[0]++;
+            }
+        }.runTaskTimer(JBuildBattle.getInstance(), 0L, 2L); // 2 ticks (0.1 segundos)
     }
 
     public void win(TeamType team) {

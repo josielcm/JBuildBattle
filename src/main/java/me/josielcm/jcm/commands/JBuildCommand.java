@@ -60,10 +60,20 @@ public class JBuildCommand extends BaseCommand {
         }
     }
 
+    @Subcommand("glow")
+    public void onGlowCommand(CommandSender sender) {
+        if (sender.hasPermission("jbuild.glow")) {
+            JBuildBattle.getInstance().getGameManager().toggleGlow();
+            sender.sendMessage(Color.parse("<yellow>Glow toggled!"));
+        } else {
+            sender.sendMessage(Color.parse("<red>You don't have permission to use this command."));
+        }
+    }
+
     @CatchUnknown
     public void onUnknownCommand(CommandSender sender) {
         sender.sendMessage(Color.parse("<gold>Sos pelotudo o que se te olvidó el comando? xd"));
-        sender.sendMessage(Color.parse("<gold>Usa /jbuild start/stop/reset/winner(type=pros/noobs)"));
+        sender.sendMessage(Color.parse("<gold>Usa /jbuild start/stop/reset/glow(toggle)/winner(type=pros/noobs)"));
     }
 
     @HelpCommand
