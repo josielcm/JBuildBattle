@@ -62,7 +62,7 @@ public class VoteManager {
         PlayerManager.sendTitle("<color:#C8B273>" + winner, "", 1, 5, 1);
         BossBarManager.updateText(Color.parse("<color:#C8B273>" + winner));
 
-        JBuildBattle.getInstance().getGameManager().startGame(GameTheme.valueOf(winner));
+        JBuildBattle.getInstance().getGameManager().startGame(getThemeWinner());
 
         playersVoted.clear();
         votes.replaceAll((k, v) -> 0);
