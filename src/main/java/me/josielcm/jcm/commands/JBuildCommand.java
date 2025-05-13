@@ -70,10 +70,51 @@ public class JBuildCommand extends BaseCommand {
         }
     }
 
+    @Subcommand("addtime")
+    public void onAddTimeCommand(CommandSender sender, int time) {
+        if (sender.hasPermission("jbuild.addtime")) {
+            JBuildBattle.getInstance().getGameManager().addTime(time);
+            sender.sendMessage(Color.parse("<green>Added " + time + " seconds!"));
+        } else {
+            sender.sendMessage(Color.parse("<red>You don't have permission to use this command."));
+        }
+    }
+
+    @Subcommand("removetime")
+    public void onRemoveTimeCommand(CommandSender sender, int time) {
+        if (sender.hasPermission("jbuild.removetime")) {
+            JBuildBattle.getInstance().getGameManager().removeTime(time);
+            sender.sendMessage(Color.parse("<red>Removed " + time + " seconds!"));
+        } else {
+            sender.sendMessage(Color.parse("<red>You don't have permission to use this command."));
+        }
+    }
+
+    @Subcommand("settime")
+    public void onSetTimeCommand(CommandSender sender, int time) {
+        if (sender.hasPermission("jbuild.settime")) {
+            JBuildBattle.getInstance().getGameManager().setTime(time);
+            sender.sendMessage(Color.parse("<yellow>Set time to " + time + " seconds!"));
+        } else {
+            sender.sendMessage(Color.parse("<red>You don't have permission to use this command."));
+        }
+    }
+
     @CatchUnknown
     public void onUnknownCommand(CommandSender sender) {
-        sender.sendMessage(Color.parse("<gold>Sos pelotudo o que se te olvidó el comando? xd"));
-        sender.sendMessage(Color.parse("<gold>Usa /jbuild start/stop/reset/glow(toggle)/winner(type=pros/noobs)"));
+        sender.sendMessage(Color.parse("<gold><bold>----- Comandos JBuild Battle -----</bold>"));
+        sender.sendMessage(Color.parse("<yellow>» <green>/jbuild start <yellow>- Inicia el juego"));
+        sender.sendMessage(Color.parse("<yellow>» <red>/jbuild stop <yellow>- Detiene el juego"));
+        sender.sendMessage(Color.parse("<yellow>» <gold>/jbuild reset <yellow>- Reinicia el juego"));
+        sender.sendMessage(Color.parse(""));
+        sender.sendMessage(Color.parse("<gold><bold>----- Tiempo -----</bold>"));
+        sender.sendMessage(Color.parse("<yellow>» <green>/jbuild addtime <time> <yellow>- Añade tiempo"));
+        sender.sendMessage(Color.parse("<yellow>» <red>/jbuild removetime <time> <yellow>- Quita tiempo"));
+        sender.sendMessage(Color.parse("<yellow>» <aqua>/jbuild settime <time> <yellow>- Establece el tiempo"));
+        sender.sendMessage(Color.parse(""));
+        sender.sendMessage(Color.parse("<gold><bold>----- Extras -----</bold>"));
+        sender.sendMessage(Color.parse("<yellow>» <light_purple>/jbuild glow <yellow>- Activa/desactiva el brillo"));
+        sender.sendMessage(Color.parse("<yellow>» <gold>/jbuild winner <pros|noobs> <yellow>- Establece el ganador"));
     }
 
     @HelpCommand

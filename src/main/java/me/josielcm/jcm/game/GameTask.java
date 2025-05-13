@@ -17,7 +17,6 @@ import me.josielcm.jcm.ui.BossBarManager;
 public class GameTask extends BukkitRunnable {
 
     @Getter
-    @Setter
     private AtomicInteger time = new AtomicInteger(0);
 
     @Getter
@@ -94,6 +93,18 @@ public class GameTask extends BukkitRunnable {
         BossBarManager.updateText(Color.parse(message.replace("<time>", Format.formatTime(time.get()))
                 .replace("<theme>", JBuildBattle.getInstance().getGameManager().getGameTheme().getName())));
         time.decrementAndGet();
+    }
+
+    public void addTime(int time) {
+        this.time.addAndGet(time);
+    }
+
+    public void removeTime(int time) {
+        this.time.addAndGet(-time);
+    }
+
+    public void setTime(int time) {
+        this.time.set(time);
     }
 
 }

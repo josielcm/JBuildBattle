@@ -170,6 +170,24 @@ public class GameManager {
         PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BELL, 1.0f, 0.8f);
     }
 
+    public void addTime(int time) {
+        if (gameTask != null) {
+            gameTask.addTime(time);
+        }
+    }
+
+    public void removeTime(int time) {
+        if (gameTask != null) {
+            gameTask.removeTime(time);
+        }
+    }
+
+    public void setTime(int time) {
+        if (gameTask != null) {
+            gameTask.setTime(time);
+        }
+    }
+
     public void toggleGlow() {
         glow = !glow;
         Collection<? extends Player> players = Bukkit.getOnlinePlayers();
