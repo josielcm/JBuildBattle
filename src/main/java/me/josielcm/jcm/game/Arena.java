@@ -10,7 +10,7 @@ import me.josielcm.jcm.player.PlayerManager;
 import me.josielcm.jcm.player.TeamType;
 
 public class Arena {
-    
+
     @Getter
     @Setter
     private static Cuboid prosRegion;
@@ -29,26 +29,28 @@ public class Arena {
 
     public static Cuboid getRegion(Player player) {
         TeamType team = PlayerManager.getTeam(player);
+        Cuboid region = null;
 
         if (team != null) {
             switch (team) {
                 case PROS:
-                    return getProsRegion();
+                    region = getProsRegion();
+                    break;
                 case NOOBS:
-                    return getNoobsRegion();
-                default:
-                    return null;
+                    region = getNoobsRegion();
+                    break;
             }
         }
 
-        return null;
+        return region;
     }
 
     public static boolean isInRegion(Player player) {
         Cuboid region = getRegion(player);
 
         if (region != null) {
-            return region.isIn(player);
+            boolean isIn = region.isIn(player);
+            return isIn;
         }
 
         return false;
