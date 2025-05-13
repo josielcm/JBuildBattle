@@ -68,8 +68,6 @@ public class GameListener implements Listener {
                     }
                     if (spawnLocation != null) {
                         player.teleport(spawnLocation);
-                    } else {
-                        player.sendMessage(Color.parse("<red>Error: Invalid spawn location!"));
                     }
                 } else {
                     player.teleport(Arena.getSpawnNoobs());
@@ -164,7 +162,7 @@ public class GameListener implements Listener {
         }
 
         ItemStack item = ev.getItem();
-        
+
         if (item.getType().toString().contains("EGG") || item.getType().toString().contains("SPAWN_EGG")) {
             ev.setCancelled(true);
             player.sendMessage(Color.parse("<red>¡No puedes usar huevos de spawn!"));
