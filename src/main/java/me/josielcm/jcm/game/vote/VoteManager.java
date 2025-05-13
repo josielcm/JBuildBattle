@@ -107,8 +107,8 @@ public class VoteManager {
 
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.getInventory().addItem(cityItem, castleItem, landscapeItem, colorItem);
-            player.sendMessage("<gold>¡Vota por una tematica!");
-            player.sendMessage("<grey>Click derecho al item para votar");
+            player.sendMessage(Color.parse("<gold>¡Vota por una tematica!"));
+            player.sendMessage(Color.parse("<grey>Click derecho al item para votar"));
         });
         
     }
