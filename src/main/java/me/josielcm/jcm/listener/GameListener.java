@@ -43,10 +43,6 @@ public class GameListener implements Listener {
     
             boolean isInRegion = Arena.isInRegion(player);
             boolean canLeaveZone = JBuildBattle.getInstance().getGameManager().isCanLeaveZone();
-            
-            player.sendMessage(Color.parse("<gray>Debug: InRegion=" + isInRegion + 
-                                         ", CanLeaveZone=" + canLeaveZone + 
-                                         ", Team=" + PlayerManager.getTeam(player)));
     
             if (isInRegion) {
                 return;
@@ -69,10 +65,6 @@ public class GameListener implements Listener {
                     }
                     if (spawnLocation != null) {
                         player.teleport(spawnLocation);
-                        player.sendMessage(Color.parse("<gray>Debug: Teleported to " + 
-                                         spawnLocation.getX() + "," + 
-                                         spawnLocation.getY() + "," + 
-                                         spawnLocation.getZ()));
                     } else {
                         player.sendMessage(Color.parse("<red>Error: Invalid spawn location!"));
                     }
