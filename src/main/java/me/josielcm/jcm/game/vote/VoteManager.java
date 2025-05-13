@@ -1,8 +1,11 @@
 package me.josielcm.jcm.game.vote;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -11,6 +14,8 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 
+import dev.triumphteam.gui.guis.Gui;
+import dev.triumphteam.gui.guis.GuiItem;
 import lombok.Getter;
 import lombok.Setter;
 import me.josielcm.jcm.JBuildBattle;
@@ -22,25 +27,24 @@ import me.josielcm.jcm.player.PlayerManager;
 import me.josielcm.jcm.ui.BossBarManager;
 
 public class VoteManager {
-    
+
     @Getter
     private Set<GameTheme> options = Set.of(GameTheme.values());
 
     @Getter
     private static Set<UUID> playersVoted = new HashSet<>();
 
-        private static Map<GameTheme, Integer> votes = new HashMap<>(Map.of(
-        GameTheme.CITY, 0,
-        GameTheme.CASTLE, 0,
-        GameTheme.LANDSCAPE, 0,
-        GameTheme.COLOR, 0
-    ));
+    private static Map<GameTheme, Integer> votes = new HashMap<>(Map.of(
+            GameTheme.CITY, 0,
+            GameTheme.CASTLE, 0,
+            GameTheme.LANDSCAPE, 0,
+            GameTheme.COLOR, 0));
 
     @Getter
     private static VoteTask voteTask;
 
     @Setter
-    private static String voteMessage = "<gold><time></gold>";
+    private static String voteMessage = "<yellow>Tiempo de votación</yellow> <grey>|</grey <gold><b><time></b></gold>";
 
     public static void startVotes() {
         if (voteTask != null) {
@@ -48,9 +52,10 @@ public class VoteManager {
             voteTask = null;
         }
 
-        giveItems();
+        openVoteMenu();
         voteTask = new VoteTask(30, voteMessage);
         voteTask.runTaskTimer(JBuildBattle.getInstance(), 0, 20);
+        PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f);
     }
 
     public static void stopVotes() {
@@ -69,6 +74,7 @@ public class VoteManager {
         votes.replaceAll((k, v) -> 0);
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.getInventory().clear();
+            player.closeInventory();
             player.sendMessage(Color.parse("<gold>¡Votación terminada!"));
             player.playSound(player.getLocation(), Sound.UI_TOAST_IN, 1f, 1f);
         });
@@ -83,47 +89,123 @@ public class VoteManager {
         votes.put(theme, votes.get(theme) + 1);
     }
 
-    private static void giveItems() {
-        ItemStack cityItem = ItemBuilder.builder()
+    private static void openVoteMenu() {
+        Gui gui = Gui.gui()
+                .title(Color.parse("<gold><b>¡Vota por una tematica!</b><gold>"))
+                .rows(3)
+                .disableAllInteractions()
+                .create();
+
+        gui.setCloseGuiAction(event -> {
+            if (playersVoted.contains(event.getPlayer().getUniqueId())) {
+                return;
+            }
+            openVoteMenu();
+        });
+
+        ItemStack cityItemStack = ItemBuilder.builder()
                 .material(Material.PAPER)
                 .displayName("<color:#C8B273>Ciudad")
-                .pdc(Key.getVoteOptionsItemsKey(),"CITY")
+                .pdc(Key.getVoteOptionsItemsKey(), "CITY")
                 .build();
-        ItemStack castleItem = ItemBuilder.builder()
+        ItemStack castleItemStack = ItemBuilder.builder()
                 .material(Material.PAPER)
                 .displayName("<color:#C8B273>Castillo")
-                .pdc(Key.getVoteOptionsItemsKey(),"CASTLE")
+                .pdc(Key.getVoteOptionsItemsKey(), "CASTLE")
                 .build();
 
-        ItemStack landscapeItem = ItemBuilder.builder()
+        ItemStack landscapeItemStack = ItemBuilder.builder()
                 .material(Material.PAPER)
                 .displayName("<color:#C8B273>Paisaje")
-                .pdc(Key.getVoteOptionsItemsKey(),"LANDSCAPE")
-                .build();
-        
-        ItemStack colorItem = ItemBuilder.builder()
-                .material(Material.PAPER)
-                .displayName("<color:#C8B273>Colorido")
-                .pdc(Key.getVoteOptionsItemsKey(),"COLOR")
+                .pdc(Key.getVoteOptionsItemsKey(), "LANDSCAPE")
                 .build();
 
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            player.getInventory().addItem(cityItem, castleItem, landscapeItem, colorItem);
-            player.sendMessage(Color.parse("<gold>¡Vota por una tematica!"));
-            player.sendMessage(Color.parse("<grey>Click derecho al item para votar"));
+        ItemStack colorItemStack = ItemBuilder.builder()
+                .material(Material.PAPER)
+                .displayName("<color:#C8B273>Colorido")
+                .pdc(Key.getVoteOptionsItemsKey(), "COLOR")
+                .build();
+
+        GuiItem cityItem = new GuiItem(cityItemStack, event -> {
+            event.setCancelled(true);
+            if (playersVoted.contains(event.getWhoClicked().getUniqueId())) {
+                event.getWhoClicked().sendMessage(Color.parse("<red>¡Ya has votado!"));
+                gui.close(event.getWhoClicked());
+                return;
+            }
+            addVote(GameTheme.CITY, event.getWhoClicked().getUniqueId());
+            event.getWhoClicked().sendMessage(Color.parse("<gold>¡Votaste por la ciudad!"));
+            event.getWhoClicked().closeInventory();
         });
-        
+
+        GuiItem castleItem = new GuiItem(castleItemStack, event -> {
+            event.setCancelled(true);
+            if (playersVoted.contains(event.getWhoClicked().getUniqueId())) {
+                event.getWhoClicked().sendMessage(Color.parse("<red>¡Ya has votado!"));
+                gui.close(event.getWhoClicked());
+                return;
+            }
+            addVote(GameTheme.CASTLE, event.getWhoClicked().getUniqueId());
+            event.getWhoClicked().sendMessage(Color.parse("<gold>¡Votaste por el castillo!"));
+            event.getWhoClicked().closeInventory();
+        });
+
+        GuiItem landscapeItem = new GuiItem(landscapeItemStack, event -> {
+            event.setCancelled(true);
+            if (playersVoted.contains(event.getWhoClicked().getUniqueId())) {
+                event.getWhoClicked().sendMessage(Color.parse("<red>¡Ya has votado!"));
+                gui.close(event.getWhoClicked());
+                return;
+            }
+            addVote(GameTheme.LANDSCAPE, event.getWhoClicked().getUniqueId());
+            event.getWhoClicked().sendMessage(Color.parse("<gold>¡Votaste por el paisaje!"));
+            event.getWhoClicked().closeInventory();
+        });
+
+        GuiItem colorItem = new GuiItem(colorItemStack, event -> {
+            event.setCancelled(true);
+            if (playersVoted.contains(event.getWhoClicked().getUniqueId())) {
+                event.getWhoClicked().sendMessage(Color.parse("<red>¡Ya has votado!"));
+                gui.close(event.getWhoClicked());
+                return;
+            }
+            addVote(GameTheme.COLOR, event.getWhoClicked().getUniqueId());
+            event.getWhoClicked().sendMessage(Color.parse("<gold>¡Votaste por el colorido!"));
+            event.getWhoClicked().closeInventory();
+        });
+
+        gui.setItem(11, cityItem);
+        gui.setItem(13, castleItem);
+        gui.setItem(15, landscapeItem);
+        gui.setItem(17, colorItem);
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            if (!playersVoted.contains(player.getUniqueId())) {
+                gui.open(player);
+            }
+        });
     }
 
     public static GameTheme getThemeWinner() {
         GameTheme winner = GameTheme.NONE;
         int maxVotes = 0;
+        List<GameTheme> tiedThemes = new ArrayList<>();
 
         for (Map.Entry<GameTheme, Integer> entry : votes.entrySet()) {
             if (entry.getValue() > maxVotes) {
                 maxVotes = entry.getValue();
-                winner = entry.getKey();
             }
+        }
+
+        for (Map.Entry<GameTheme, Integer> entry : votes.entrySet()) {
+            if (entry.getValue() == maxVotes) {
+                tiedThemes.add(entry.getKey());
+            }
+        }
+
+        if (tiedThemes.size() > 0) {
+            int randomIndex = new Random().nextInt(tiedThemes.size());
+            winner = tiedThemes.get(randomIndex);
         }
 
         return winner;

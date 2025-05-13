@@ -13,10 +13,13 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import me.josielcm.jcm.JBuildBattle;
@@ -27,30 +30,30 @@ import me.josielcm.jcm.player.PlayerManager;
 import me.josielcm.jcm.player.TeamType;
 
 public class GameListener implements Listener {
-    
+
     @EventHandler
     public void onMove(PlayerMoveEvent ev) {
         Player player = ev.getPlayer();
-    
+
         if (player.hasPermission("jbuildbattle.bypass")) {
             return;
         }
-    
+
         if (hasMoved(ev)) {
             if (player.getGameMode() == GameMode.SPECTATOR) {
                 return;
             }
-    
+
             boolean isInRegion = Arena.isInRegion(player);
             boolean canLeaveZone = JBuildBattle.getInstance().getGameManager().isCanLeaveZone();
-    
+
             if (isInRegion) {
                 return;
             } else {
                 if (canLeaveZone) {
                     return;
                 }
-                
+
                 TeamType team = PlayerManager.getTeam(player);
                 if (team != null) {
                     Location spawnLocation;
@@ -72,7 +75,7 @@ public class GameListener implements Listener {
                     player.teleport(Arena.getSpawnNoobs());
                     player.sendMessage(Color.parse("<gray>Debug: Teleported to default spawn location"));
                 }
-    
+
                 player.sendMessage(Color.parse("<red>¡No puedes salir de tu zona!"));
                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.5f);
             }
@@ -134,6 +137,48 @@ public class GameListener implements Listener {
     }
 
     @EventHandler
+    public void onHit(EntityDamageByEntityEvent ev) {
+        if (ev.getDamager() instanceof Player) {
+            Player player = (Player) ev.getDamager();
+
+            if (player.hasPermission("jbuildbattle.bypass")) {
+                return;
+            }
+
+            if (ev.getEntity() instanceof Player) {
+                ev.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent ev) {
+        Player player = ev.getPlayer();
+
+        if (player.hasPermission("jbuildbattle.bypass")) {
+            return;
+        }
+
+        if (ev.getItem() == null) {
+            return;
+        }
+
+        ItemStack item = ev.getItem();
+        
+        if (item.getType().toString().contains("EGG") || item.getType().toString().contains("SPAWN_EGG")) {
+            ev.setCancelled(true);
+            player.sendMessage(Color.parse("<red>¡No puedes usar huevos de spawn!"));
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.5f);
+        }
+
+        if (item.getType() == Material.FLINT_AND_STEEL && ev.getClickedBlock() != null && ev.getClickedBlock().getType() == Material.TNT) {
+            ev.setCancelled(true);
+            player.sendMessage(Color.parse("<red>¡No puedes encender TNT!"));
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.5f);
+        }
+    }
+
+    @EventHandler
     public void onLiquidExpand(BlockFromToEvent ev) {
         Block fromBlock = ev.getBlock();
         Block toBlock = ev.getToBlock();
@@ -155,7 +200,7 @@ public class GameListener implements Listener {
     public void onEntityMove(EntityMoveEvent ev) {
         if (!(ev.getEntity() instanceof Player)) {
             Location to = ev.getTo();
-            
+
             if (!Arena.isInRegion(to)) {
                 ev.setCancelled(true);
             }
@@ -187,8 +232,8 @@ public class GameListener implements Listener {
 
     private boolean hasMoved(PlayerMoveEvent ev) {
         return ev.getFrom().getBlockX() != ev.getTo().getBlockX() ||
-               ev.getFrom().getBlockY() != ev.getTo().getBlockY() ||
-               ev.getFrom().getBlockZ() != ev.getTo().getBlockZ();
+                ev.getFrom().getBlockY() != ev.getTo().getBlockY() ||
+                ev.getFrom().getBlockZ() != ev.getTo().getBlockZ();
     }
 
 }

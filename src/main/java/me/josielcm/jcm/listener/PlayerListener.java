@@ -13,6 +13,7 @@ import me.josielcm.jcm.JBuildBattle;
 import me.josielcm.jcm.api.formats.Color;
 import me.josielcm.jcm.game.GameState;
 import me.josielcm.jcm.player.PlayerManager;
+import me.josielcm.jcm.player.TeamManager;
 import me.josielcm.jcm.ui.BossBarManager;
 
 public class PlayerListener implements Listener {
@@ -30,7 +31,7 @@ public class PlayerListener implements Listener {
         player.sendMessage(Color.parse("<gold>¡Bienvenido al BUILDBATTLE!"));
         player.setAllowFlight(false);
         player.setFlying(false);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 10, false, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 10, true, false));
         player.getInventory().clear();
         
         if (JBuildBattle.getInstance().getGameManager().getGameState() == GameState.PLAYING) {
@@ -52,6 +53,7 @@ public class PlayerListener implements Listener {
     public void onLeave(PlayerQuitEvent ev) {
         Player player = ev.getPlayer();
         PlayerManager.onLeave(player);
+        TeamManager.removePlayerFromTeam(player);
         ev.quitMessage(Color.parse("<red>¡" + player.getName() + " se ha ido de la partida!"));
     }
 

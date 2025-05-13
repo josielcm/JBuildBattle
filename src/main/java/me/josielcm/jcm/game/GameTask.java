@@ -2,7 +2,6 @@ package me.josielcm.jcm.game;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -31,12 +30,7 @@ public class GameTask extends BukkitRunnable {
     public void run() {
         if (time.get() <= 0) {
             JBuildBattle.getInstance().getGameManager().stop();
-            
-            Bukkit.getOnlinePlayers().forEach(player -> {
-                BossBarManager.addPlayer(player);
-                BossBarManager.updateText(Color.parse("<red>¡El tiempo se ha acabado!"));
-            });
-
+            BossBarManager.removeAllPlayers();
             cancel();
             return;
         }

@@ -117,7 +117,7 @@ public class GameManager {
         this.gameTheme = gameTheme;
         this.gameState = GameState.STARTING;
 
-        final AtomicInteger countdown = new AtomicInteger(30);
+        final AtomicInteger countdown = new AtomicInteger(10);
 
         new BukkitRunnable() {
             @Override
@@ -128,8 +128,8 @@ public class GameManager {
                     gameTask.runTaskTimer(JBuildBattle.getInstance(), 0L, 20L);
                     gameState = GameState.PLAYING;
                     changeGameMode(GameMode.CREATIVE);
-                    PlayerManager.sendTitle("<color:#C8B273>¡Construyan!", "", 1, 5, 1);
-                    PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BELL, 1.0f, 0.8f);
+                    PlayerManager.sendTitle("<color:#C8B273>¡A construir!", "", 1, 5, 1);
+                    PlayerManager.playSound(Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 0.8f);
                     cancel();
                     return;
                 }
@@ -138,7 +138,7 @@ public class GameManager {
                     PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f, 0.5f);
                 }
 
-                BossBarManager.updateText(Color.parse("<gold><b>Iniciando en " + countdown.get() + " segundos</gold>"));
+                BossBarManager.updateText(Color.parse("<gold><b>Iniciando en " + countdown.get() + "</b>"));
                 countdown.decrementAndGet();
             }
         }.runTaskTimer(JBuildBattle.getInstance(), 0L, 20L);
@@ -233,6 +233,7 @@ public class GameManager {
             case NOOBS:
                 PlayerManager.sendTitle("<color:#C8B273>¡Los noobs han ganado!", "", 1, 3, 1);
                 PlayerManager.playSound(Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
+                launchFireworks(team);
                 break;
             default:
                 break;
