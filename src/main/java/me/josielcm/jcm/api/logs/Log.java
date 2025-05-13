@@ -1,23 +1,21 @@
 package me.josielcm.jcm.api.logs;
 
 import org.bukkit.Bukkit;
-import java.util.Map;
-import java.util.LinkedHashMap;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import me.josielcm.jcm.Base;
+import me.josielcm.jcm.JBuildBattle;
 
 public class Log {
     
-    private static Base plugin = Base.getInstance();
+    private static JBuildBattle plugin = JBuildBattle.getInstance();
     private static String pluginName = "NONE";
     
     public enum LogLevel {
-        INFO("<green>"),
+        INFO("<gold>"),
         WARNING("<yellow>"),
         ERROR("<red>"),
-        SUCCESS("<green>"),
+        SUCCESS("<gold>"),
         DEBUG("<aqua>");
         
         private final String color;
@@ -31,32 +29,13 @@ public class Log {
         }
     }
 
-    @SuppressWarnings("deprecation")
     public static void onLoad() {
-        pluginName = plugin.getDescription().getName();
-        
+        pluginName = plugin.getPluginMeta().getName();
         logHeader(LogLevel.INFO, "Loading " + pluginName + "...");
     }
 
-    public static void onEnable(boolean loaded, boolean events, boolean commands, boolean other, 
-                               boolean requireDependencies, boolean requireDev) {
-        
-        Map<String, Boolean> statusDetails = new LinkedHashMap<>();
-        statusDetails.put("Events", events);
-        statusDetails.put("Commands", commands);
-        statusDetails.put("Other features", other);
-        statusDetails.put("Required dependencies", requireDependencies);
-        statusDetails.put("Require support", requireDev);
-        
-        if (!loaded) {
-            logPluginStatus(LogLevel.ERROR, "Error loading " + pluginName + "!", statusDetails);
-            log(LogLevel.ERROR, "Please check the console for more information.");
-        } else {
-            logPluginStatus(LogLevel.SUCCESS, pluginName + " loaded successfully!", statusDetails);
-            log(LogLevel.SUCCESS, pluginName + " is ready to use!");
-            log(LogLevel.SUCCESS, "Enjoy!");
-        }
-        
+    public static void onEnable() {
+        logPluginStatus(LogLevel.SUCCESS, pluginName + " loaded successfully!");
         logFooter();
     }
 
@@ -81,7 +60,7 @@ public class Log {
      * Crea un encabezado para mensajes importantes
      */
     public static void logHeader(LogLevel level, String title) {
-        String separator = "═".repeat(50);
+        String separator = "-".repeat(50);
         
         Bukkit.getConsoleSender().sendRichMessage("");
         Bukkit.getConsoleSender().sendRichMessage(level.getColor() + separator);
@@ -92,15 +71,8 @@ public class Log {
     /**
      * Muestra los detalles de estado del plugin
      */
-    public static void logPluginStatus(LogLevel level, String title, Map<String, Boolean> statusDetails) {
+    public static void logPluginStatus(LogLevel level, String title) {
         logHeader(level, title);
-        
-        // Mostrar cada elemento del estado
-        for (Map.Entry<String, Boolean> detail : statusDetails.entrySet()) {
-            String status = detail.getValue() ? "✓" : "✗";
-            String itemColor = detail.getValue() ? LogLevel.SUCCESS.getColor() : LogLevel.ERROR.getColor();
-            Bukkit.getConsoleSender().sendRichMessage(itemColor + " • " + detail.getKey() + ": " + status);
-        }
     }
     
     /**
@@ -109,9 +81,8 @@ public class Log {
     public static void logFooter() {
         String separator = "─".repeat(50);
         
-        Bukkit.getConsoleSender().sendRichMessage("<gray>" + separator);
-        Bukkit.getConsoleSender().sendRichMessage("<green>Made with <red>❤ <green>by JosielCM");
-        Bukkit.getConsoleSender().sendRichMessage("<aqua>https://github.com/josielcm");
+        Bukkit.getConsoleSender().sendRichMessage("<gold>" + separator);
+        Bukkit.getConsoleSender().sendRichMessage("<gold>Dev JosielCM");
         Bukkit.getConsoleSender().sendRichMessage("");
     }
     
@@ -129,6 +100,10 @@ public class Log {
         if (e != null) {
             log(LogLevel.ERROR, "Exception: " + e.getClass().getName());
             log(LogLevel.ERROR, "Cause: " + e.getMessage());
+            log(LogLevel.ERROR, "Stack Trace:");
+            for (StackTraceElement element : e.getStackTrace()) {
+                log(LogLevel.ERROR, "  at " + element.toString());
+            }
         }
         
         Bukkit.getConsoleSender().sendRichMessage("<gray>Check logs for full stack trace.");

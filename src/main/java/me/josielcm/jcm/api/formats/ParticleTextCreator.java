@@ -8,11 +8,11 @@ import org.bukkit.Particle;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import lombok.Getter;
-import me.josielcm.jcm.Base;
+import me.josielcm.jcm.JBuildBattle;
 
 public class ParticleTextCreator {
 
-    private static final Base plugin = Base.getInstance();
+    private static final JBuildBattle plugin = JBuildBattle.getInstance();
     private static final Map<Character, boolean[][]> characterMatrices = initializeCharacters();
     
     // Constants for character display

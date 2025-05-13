@@ -9,16 +9,22 @@ import lombok.Getter;
 import lombok.Setter;
 import me.josielcm.jcm.api.Key;
 import me.josielcm.jcm.api.logs.Log;
-import me.josielcm.jcm.commands.DickMain;
-import me.josielcm.jcm.commands.subscommands.Reload;
+import me.josielcm.jcm.commands.JBuildCommand;
+import me.josielcm.jcm.game.GameManager;
+import me.josielcm.jcm.listener.GameListener;
+import me.josielcm.jcm.listener.PlayerListener;
+import me.josielcm.jcm.listener.VoteListener;
 
 import java.util.Arrays;
 import java.util.List;
 
-public final class Base extends JavaPlugin {
+public final class JBuildBattle extends JavaPlugin {
 
     @Getter
-    private static Base instance;
+    private static JBuildBattle instance;
+
+    @Getter
+    private GameManager gameManager;
 
     private PaperCommandManager commandManager;
 
@@ -38,16 +44,12 @@ public final class Base extends JavaPlugin {
         FileManager.loadFiles();
         FileManager.debug();
 
-        setupCommands();
+        gameManager = new GameManager();
 
-        Log.onEnable(
-                isEnabled(), // Plugin enabled status
-                false, // Events loaded
-                true, // Commands loaded
-                false, // Other features
-                true, // Dependencies required
-                false // Development mode
-        );
+        setupCommands();
+        registerListeners();
+
+        Log.onEnable();
     }
 
     @Override
@@ -70,13 +72,18 @@ public final class Base extends JavaPlugin {
         Log.onReload();
     }
 
+    private void registerListeners() {
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        getServer().getPluginManager().registerEvents(new GameListener(), this);
+        getServer().getPluginManager().registerEvents(new VoteListener(), this);
+    }
+
     private void setupCommands() {
         commandManager = new PaperCommandManager(this);
 
         // Register all commands at once
         List<BaseCommand> commands = Arrays.asList(
-                new DickMain(),
-                new Reload());
+                new JBuildCommand());
 
         for (BaseCommand command : commands) {
             commandManager.registerCommand(command);

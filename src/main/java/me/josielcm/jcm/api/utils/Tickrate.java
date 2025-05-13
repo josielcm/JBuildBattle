@@ -5,7 +5,7 @@ import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
 
-import me.josielcm.jcm.Base;
+import me.josielcm.jcm.JBuildBattle;
 
 /*
  * Change player tick rate but only works in 1.21.1
@@ -37,7 +37,7 @@ public class Tickrate {
             sendPacket.invoke(connection, packet);
 
         } catch (Exception e) {
-            Base.getInstance().getLogger().log(Level.SEVERE, "Error setting tick rate", e);
+            JBuildBattle.getInstance().getLogger().log(Level.SEVERE, "Error setting tick rate", e);
         }
 
     }

@@ -17,7 +17,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import lombok.Getter;
-import me.josielcm.jcm.Base;
+import me.josielcm.jcm.JBuildBattle;
 import me.josielcm.jcm.api.Key;
 import me.josielcm.jcm.api.items.ItemBuilder;
 
@@ -31,7 +31,7 @@ public class Selector implements Listener {
     public Selector(Player player, boolean confirmItem) {
         this.items = new HashMap<>();
         this.data = new SelectorData(player.getUniqueId());
-        Base.getInstance().getServer().getPluginManager().registerEvents(this, Base.getInstance());
+        JBuildBattle.getInstance().getServer().getPluginManager().registerEvents(this, JBuildBattle.getInstance());
 
         player.sendRichMessage("<green>Selector mode activated!");
         enable(confirmItem);

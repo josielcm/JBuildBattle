@@ -1,6 +1,6 @@
-name: Base
+name: JBuildBattle
 version: '${version}'
-main: me.josielcm.jcm.Base
-api-version: '1.20'
-api: '1.20'
+main: me.josielcm.jcm.JBuildBattle
+api-version: '1.21'
+api: '1.21'
 load: POSTWORLD

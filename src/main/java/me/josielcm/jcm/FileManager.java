@@ -5,7 +5,7 @@ import me.josielcm.jcm.api.files.configs.Config;
 
 public class FileManager {
 
-    final static Base plugin = Base.getInstance();
+    final static JBuildBattle plugin = JBuildBattle.getInstance();
 
     @Getter
     static Config messages = null;

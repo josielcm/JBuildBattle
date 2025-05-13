@@ -79,10 +79,9 @@ public class Cuboid {
     public Location getCenter() {
         return new Location(
                 this.world,
-                (double)(this.xMax - this.xMin) / 2 + this.xMin,
-                (double)(this.yMax - this.yMin) / 2 + this.yMin,
-                (double)(this.zMax - this.zMin) / 2 + this.zMin
-        );
+                (double) (this.xMax - this.xMin) / 2 + this.xMin,
+                (double) (this.yMax - this.yMin) / 2 + this.yMin,
+                (double) (this.zMax - this.zMin) / 2 + this.zMin);
     }
 
     public double getDistance() {
@@ -122,10 +121,17 @@ public class Cuboid {
     }
 
     public boolean isIn(final Location loc) {
-        return loc.getWorld() == this.world &&
-                loc.getBlockX() >= this.xMin - 1 && loc.getBlockX() <= this.xMax + 1 &&
-                loc.getBlockY() >= this.yMin && loc.getBlockY() <= this.yMax &&
-                loc.getBlockZ() >= this.zMin - 1 && loc.getBlockZ() <= this.zMax + 1;
+        if (loc.getWorld() != this.world) {
+            return false;
+        }
+
+        double x = loc.getX();
+        double y = loc.getY();
+        double z = loc.getZ();
+
+        return x >= this.xMin && x <= this.xMax + 1 &&
+                y >= this.yMin && y <= this.yMax + 1 &&
+                z >= this.zMin && z <= this.zMax + 1;
     }
 
     public boolean isIn(final Player player) {
@@ -156,7 +162,8 @@ public class Cuboid {
 
         for (int cx = minChunkX; cx <= maxChunkX; cx++) {
             for (int cz = minChunkZ; cz <= maxChunkZ; cz++) {
-                // Comprobamos que el chunk esté cargado para evitar cargar chunks innecesariamente.
+                // Comprobamos que el chunk esté cargado para evitar cargar chunks
+                // innecesariamente.
                 if (world.isChunkLoaded(cx, cz)) {
                     Chunk chunk = world.getChunkAt(cx, cz);
                     for (Entity entity : chunk.getEntities()) {
@@ -181,7 +188,8 @@ public class Cuboid {
     }
 
     public boolean intersects(Cuboid other) {
-        if (this.world != other.world) return false;
+        if (this.world != other.world)
+            return false;
         return this.xMax >= other.xMin && this.xMin <= other.xMax &&
                 this.yMax >= other.yMin && this.yMin <= other.yMax &&
                 this.zMax >= other.zMin && this.zMin <= other.zMax;

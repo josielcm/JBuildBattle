@@ -21,7 +21,7 @@ import org.bukkit.persistence.PersistentDataType;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 
-import me.josielcm.jcm.Base;
+import me.josielcm.jcm.JBuildBattle;
 import me.josielcm.jcm.api.formats.Color;
 import net.kyori.adventure.text.Component;
 
@@ -231,7 +231,7 @@ public class ItemBuilder {
                 profile.setProperty(new ProfileProperty("textures", texture));
                 skullMeta.setPlayerProfile(profile);
             } catch (Exception e) {
-                Base.getInstance().getLogger().log(Level.WARNING, "Error while setting skull texture: " + e.getMessage());
+                JBuildBattle.getInstance().getLogger().log(Level.WARNING, "Error while setting skull texture: " + e.getMessage());
                 e.printStackTrace();
             }
         }
