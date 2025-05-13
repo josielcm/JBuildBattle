@@ -58,7 +58,6 @@ public final class JBuildBattle extends JavaPlugin {
             commandManager.unregisterCommands();
         }
 
-        FileManager.saveFiles();
         Log.onDisable();
     }
 
