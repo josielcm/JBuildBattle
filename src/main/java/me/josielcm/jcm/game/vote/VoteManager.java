@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 
 import lombok.Getter;
@@ -68,7 +69,8 @@ public class VoteManager {
         votes.replaceAll((k, v) -> 0);
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.getInventory().clear();
-            player.sendMessage("<gold>¡Votación terminada!");
+            player.sendMessage(Color.parse("<gold>¡Votación terminada!"));
+            player.playSound(player.getLocation(), Sound.UI_TOAST_IN, 1f, 1f);
         });
     }
 

@@ -31,46 +31,60 @@ public class GameListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent ev) {
         Player player = ev.getPlayer();
-
+    
         if (player.hasPermission("jbuildbattle.bypass")) {
             return;
         }
-
+    
         if (hasMoved(ev)) {
             if (player.getGameMode() == GameMode.SPECTATOR) {
                 return;
             }
-
-            if (Arena.isInRegion(player)) {
+    
+            boolean isInRegion = Arena.isInRegion(player);
+            boolean canLeaveZone = JBuildBattle.getInstance().getGameManager().isCanLeaveZone();
+            
+            player.sendMessage(Color.parse("<gray>Debug: InRegion=" + isInRegion + 
+                                         ", CanLeaveZone=" + canLeaveZone + 
+                                         ", Team=" + PlayerManager.getTeam(player)));
+    
+            if (isInRegion) {
                 return;
             } else {
-                if (JBuildBattle.getInstance().getGameManager().isCanLeaveZone()) {
+                if (canLeaveZone) {
                     return;
                 }
-
-                ev.setCancelled(true);
                 
                 TeamType team = PlayerManager.getTeam(player);
                 if (team != null) {
+                    Location spawnLocation;
                     switch (team) {
                         case PROS:
-                            player.teleport(Arena.getSpawnPros());
+                            spawnLocation = Arena.getSpawnPros();
                             break;
                         case NOOBS:
-                            player.teleport(Arena.getSpawnNoobs());
-                            break;
                         default:
+                            spawnLocation = Arena.getSpawnNoobs();
                             break;
+                    }
+                    if (spawnLocation != null) {
+                        player.teleport(spawnLocation);
+                        player.sendMessage(Color.parse("<gray>Debug: Teleported to " + 
+                                         spawnLocation.getX() + "," + 
+                                         spawnLocation.getY() + "," + 
+                                         spawnLocation.getZ()));
+                    } else {
+                        player.sendMessage(Color.parse("<red>Error: Invalid spawn location!"));
                     }
                 } else {
                     player.teleport(Arena.getSpawnNoobs());
+                    player.sendMessage(Color.parse("<gray>Debug: Teleported to default spawn location"));
                 }
-
+    
                 player.sendMessage(Color.parse("<red>¡No puedes salir de tu zona!"));
                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.5f);
             }
         }
-
     }
 
     @EventHandler

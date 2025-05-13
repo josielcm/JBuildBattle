@@ -129,9 +129,9 @@ public class Cuboid {
         double y = loc.getY();
         double z = loc.getZ();
 
-        return x >= this.xMin && x <= this.xMax + 1 &&
-                y >= this.yMin && y <= this.yMax + 1 &&
-                z >= this.zMin && z <= this.zMax + 1;
+        return x >= this.xMin && x <= this.xMax &&
+                y >= this.yMin && y <= this.yMax &&
+                z >= this.zMin && z <= this.zMax;
     }
 
     public boolean isIn(final Player player) {

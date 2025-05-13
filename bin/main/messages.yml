@@ -1,3 +1,3 @@
 def: "No fue encontrado."
 
-bossbar-timer: "<color#C8B273><b><theme></b></color> <grey>|</grey> <color:#FFBF00><b><time></b></color>"
+bossbar-timer: "<color:#C8B273><b><theme></b></color> <grey>|</grey> <color:#FFBF00><b><time></b></color>"

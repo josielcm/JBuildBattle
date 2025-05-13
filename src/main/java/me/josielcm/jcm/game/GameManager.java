@@ -128,7 +128,7 @@ public class GameManager {
                     gameTask.runTaskTimer(JBuildBattle.getInstance(), 0L, 20L);
                     gameState = GameState.PLAYING;
                     changeGameMode(GameMode.CREATIVE);
-                    PlayerManager.sendTitle("<color:#C8B273>¡Construyan!", "", 1, 3, 1);
+                    PlayerManager.sendTitle("<color:#C8B273>¡Construyan!", "", 1, 5, 1);
                     PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BELL, 1.0f, 0.8f);
                     cancel();
                     return;
@@ -154,6 +154,10 @@ public class GameManager {
         teleportPlayers();
         changeGameMode(GameMode.SPECTATOR);
         canLeaveZone = true;
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.getInventory().clear();
+        });
 
         PlayerManager.sendTitle("<color:#C8B273>¡Se acabo el tiempo!", "", 1, 3, 1);
         PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BELL, 1.0f, 0.8f);

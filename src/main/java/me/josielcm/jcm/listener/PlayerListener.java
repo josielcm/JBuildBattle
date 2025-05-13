@@ -6,6 +6,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import me.josielcm.jcm.JBuildBattle;
 import me.josielcm.jcm.api.formats.Color;
@@ -26,6 +28,9 @@ public class PlayerListener implements Listener {
         }
 
         player.sendMessage(Color.parse("<gold>¡Bienvenido al BUILDBATTLE!"));
+        player.setAllowFlight(false);
+        player.setFlying(false);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 10, false, false));
         player.getInventory().clear();
         
         if (JBuildBattle.getInstance().getGameManager().getGameState() == GameState.PLAYING) {
