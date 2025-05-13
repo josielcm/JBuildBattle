@@ -56,6 +56,7 @@ public class GameManager {
         this.gameTheme = GameTheme.NONE;
         this.gameState = GameState.WAITING;
         this.teamManager = new TeamManager();
+        new BossBarManager();
         instanceArena();
     }
 

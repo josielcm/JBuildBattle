@@ -33,6 +33,14 @@ public class BossBarManager {
     }
 
     public static void addPlayer(Player player) {
+        if (bossBar == null) {
+            bossBar = BossBar.bossBar(
+                Color.parse("<yellow>Esperando..."),
+                0f,
+                BossBar.Color.YELLOW,
+                BossBar.Overlay.PROGRESS);
+        }
+
         removePlayer(player);
         player.showBossBar(bossBar);
     }
