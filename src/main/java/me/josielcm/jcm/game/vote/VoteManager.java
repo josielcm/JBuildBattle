@@ -49,7 +49,7 @@ public class VoteManager {
 
         giveItems();
         voteTask = new VoteTask(30, voteMessage);
-        voteTask.runTaskTimer(JBuildBattle.getInstance(), 0, 180);
+        voteTask.runTaskTimer(JBuildBattle.getInstance(), 0, 20);
     }
 
     public static void stopVotes() {

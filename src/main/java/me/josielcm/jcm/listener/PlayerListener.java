@@ -26,6 +26,7 @@ public class PlayerListener implements Listener {
         }
 
         player.sendMessage(Color.parse("<gold>¡Bienvenido al BUILDBATTLE!"));
+        player.getInventory().clear();
         
         if (JBuildBattle.getInstance().getGameManager().getGameState() == GameState.PLAYING) {
             player.setGameMode(GameMode.CREATIVE);
