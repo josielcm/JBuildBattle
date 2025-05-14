@@ -406,7 +406,10 @@ public class GameManager {
         int x2 = FileManager.getSettings().getInt(basePath + ".pos2.x");
         int y2 = FileManager.getSettings().getInt(basePath + ".pos2.y");
         int z2 = FileManager.getSettings().getInt(basePath + ".pos2.z");
-        return new Cuboid(world, x1, x2, y1, y2, z1, z2);
+
+        Location point1 = new Location(world, x1, y1, z1);
+        Location point2 = new Location(world, x2, y2, z2);
+        return new Cuboid(point1, point2);
     }
 
 }

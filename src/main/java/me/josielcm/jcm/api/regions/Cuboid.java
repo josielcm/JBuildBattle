@@ -125,9 +125,9 @@ public class Cuboid {
             return false;
         }
 
-        int x = loc.getBlockX();
-        int y = loc.getBlockY();
-        int z = loc.getBlockZ();
+        int x = (int) loc.getX();
+        int y = (int) loc.getY();
+        int z = (int) loc.getZ();
 
         return x >= this.xMin && x <= this.xMax &&
                 y >= this.yMin && y <= this.yMax &&
