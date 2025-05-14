@@ -44,7 +44,7 @@ public class VoteManager {
     private static VoteTask voteTask;
 
     @Setter
-    private static String voteMessage = "<yellow>Tiempo de votación</yellow> <grey>|</grey <gold><b><time></b></gold>";
+    private static String voteMessage = "<yellow>Tiempo de votación</yellow> <grey>|</grey> <gold><b><time></b></gold>";
 
     @Getter
     private static Gui gui;
