@@ -36,6 +36,7 @@ public class GameTask extends BukkitRunnable {
         }
 
         if (time.get() == 10) {
+            BossBarManager.updateText(Color.parse("<gold><b>Esperando</b></gold>"));
             BossBarManager.removeAllPlayers();
         }
 

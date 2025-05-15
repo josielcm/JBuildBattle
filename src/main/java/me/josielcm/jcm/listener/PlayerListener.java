@@ -12,6 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 import me.josielcm.jcm.JBuildBattle;
 import me.josielcm.jcm.api.formats.Color;
 import me.josielcm.jcm.game.GameState;
+import me.josielcm.jcm.game.vote.VoteManager;
 import me.josielcm.jcm.player.PlayerManager;
 import me.josielcm.jcm.player.TeamManager;
 import me.josielcm.jcm.ui.BossBarManager;
@@ -22,22 +23,29 @@ public class PlayerListener implements Listener {
     public void onJoin(PlayerJoinEvent ev) {
         Player player = ev.getPlayer();
 
+        BossBarManager.addPlayer(player);
+        ev.joinMessage(Color.parse("<gold>¡" + player.getName() + " se ha unido a la partida!"));
+
         if (player.hasPermission("jbuildbattle.bypass")) {
-            player.sendMessage(Color.parse("<gold>¡Bienvenido al BUILDBATTLE!"));
-            player.sendMessage(Color.parse("<yellow>¡Tienes bypass!"));
+            player.sendMessage(Color.parse("<yellow>¡Tienes bypass del BuildBattle capo!"));
             return;
         }
 
-        player.sendMessage(Color.parse("<gold>¡Bienvenido al BUILDBATTLE!"));
         player.setAllowFlight(false);
         player.setFlying(false);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 10, true, false));
         player.getInventory().clear();
+
+        GameState gameState = JBuildBattle.getInstance().getGameManager().getGameState();
         
-        if (JBuildBattle.getInstance().getGameManager().getGameState() == GameState.PLAYING) {
+        if (gameState == GameState.PLAYING) {
             player.setGameMode(GameMode.CREATIVE);
         } else {
             player.setGameMode(GameMode.ADVENTURE);
+        }
+
+        if (gameState == GameState.VOTING) {
+            VoteManager.openVoteMenu(player);
         }
 
         if (JBuildBattle.getInstance().getGameManager().isGlow()) {
@@ -45,8 +53,6 @@ public class PlayerListener implements Listener {
         }
 
         PlayerManager.onJoin(player);
-        BossBarManager.addPlayer(player);
-        ev.joinMessage(Color.parse("<gold>¡" + player.getName() + " se ha unido a la partida!"));
     }
 
     @EventHandler

@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.Location;
@@ -43,6 +44,9 @@ public class GameManager {
 
     @Getter
     private GameTask gameTask;
+
+    @Getter
+    private BukkitTask task;
 
     @Getter
     @Setter
@@ -119,7 +123,7 @@ public class GameManager {
 
         final AtomicInteger countdown = new AtomicInteger(10);
 
-        new BukkitRunnable() {
+        task = new BukkitRunnable() {
             @Override
             public void run() {
                 if (countdown.get() <= 0) {
@@ -171,7 +175,10 @@ public class GameManager {
 
         teleportPlayers();
         changeGameMode(GameMode.ADVENTURE);
-        BossBarManager.removeAllPlayers();
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.getInventory().clear();
+            BossBarManager.addPlayer(player);
+        });
         PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BELL, 1.0f, 0.8f);
     }
 
@@ -389,6 +396,11 @@ public class GameManager {
         if (gameTask != null) {
             gameTask.cancel();
             gameTask = null;
+        }
+
+        if (task != null) {
+            task.cancel();
+            task = null;
         }
     }
 

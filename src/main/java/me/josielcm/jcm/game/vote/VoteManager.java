@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -95,6 +96,17 @@ public class VoteManager {
 
         playersVoted.add(player);
         votes.put(theme, votes.get(theme) + 1);
+    }
+
+    public static void openVoteMenu(Player player) {
+        if (gui == null) return;
+
+        if (playersVoted.contains(player.getUniqueId())) {
+            gui.close(player);
+            return;
+        }
+
+        gui.open(player);
     }
 
     private static void openVoteMenu() {
@@ -182,7 +194,6 @@ public class VoteManager {
         try {
             HumanEntity player = event.getPlayer();
             if (playersVoted.contains(player.getUniqueId())) {
-                player.sendMessage(Color.parse("<red>¡Ya has votado!"));
                 gui.close(player);
                 return;
             }

@@ -22,7 +22,7 @@ public class BossBarManager {
 
     public BossBarManager() {
         bossBar = BossBar.bossBar(
-                Color.parse("<yellow>Esperando..."),
+                Color.parse("<gold><b>Esperando</b></gold>"),
                 0f,
                 BossBar.Color.YELLOW,
                 BossBar.Overlay.PROGRESS);
@@ -35,7 +35,7 @@ public class BossBarManager {
     public static void addPlayer(Player player) {
         if (bossBar == null) {
             bossBar = BossBar.bossBar(
-                Color.parse("<yellow>Esperando..."),
+                Color.parse("<gold><b>Esperando</b></gold>"),
                 0f,
                 BossBar.Color.YELLOW,
                 BossBar.Overlay.PROGRESS);
