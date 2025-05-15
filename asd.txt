@@ -21,3 +21,12 @@ Colorido
 <gradient:#FF6B6B:#FFAF70:#FFF275:#C7EE80:#8EEA8B:#6A9EFF:#7B4FFF:#8B00FF>
 
 eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWY1NzAxZGE0ZDUwZGQ0NDdlNjgzZGQ5MDA3N2NhMjJkNmI0NjEyZTVkYTEwODAzZTNjNDg2YzUyOTg3ZmVlZiJ9fX0=
+
+
+
+ &7» &c¡No puedes romper bloques fuera de tu zona! 
+<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> 
+Matias[GANG]
+ — 11:40 p.m.
+del 10 al 4 = /sound BLOCK_NOTE_BLOCK_PLING -p:1
+del 3 al 1 = /sound BLOCK_NOTE_BLOCK_PLING -p:0

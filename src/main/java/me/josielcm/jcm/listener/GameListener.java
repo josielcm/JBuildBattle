@@ -1,5 +1,8 @@
 package me.josielcm.jcm.listener;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,6 +12,7 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockFromToEvent;
@@ -22,6 +26,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
+import lombok.Getter;
 import me.josielcm.jcm.JBuildBattle;
 import me.josielcm.jcm.api.formats.Color;
 import me.josielcm.jcm.game.Arena;
@@ -31,9 +36,18 @@ import me.josielcm.jcm.player.TeamType;
 
 public class GameListener implements Listener {
 
+    @Getter
+    private static HashMap<UUID, Long> lastMessage = new HashMap<>();
+
+    private static final long COOLDOWN_TIME = 2000;
+
     @EventHandler
     public void onMove(PlayerMoveEvent ev) {
         Player player = ev.getPlayer();
+
+        if (JBuildBattle.getInstance().getGameManager().isAllowALL()) {
+            return;
+        }
 
         if (player.hasPermission("jbuildbattle.bypass")) {
             return;
@@ -71,11 +85,9 @@ public class GameListener implements Listener {
                     }
                 } else {
                     player.teleport(Arena.getSpawnNoobs());
-                    player.sendMessage(Color.parse("<gray>Debug: Teleported to default spawn location"));
                 }
 
-                player.sendMessage(Color.parse("<red>¡No puedes salir de tu zona!"));
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.5f);
+                sendCooldownMessage(player, "<red>¡No puedes salir de tu área!", Sound.BLOCK_ANVIL_PLACE, 1, 2);
             }
         }
     }
@@ -84,6 +96,10 @@ public class GameListener implements Listener {
     public void onBreak(BlockBreakEvent ev) {
         Player player = ev.getPlayer();
 
+        if (JBuildBattle.getInstance().getGameManager().isAllowALL()) {
+            return;
+        }
+
         if (player.hasPermission("jbuildbattle.bypass")) {
             return;
         }
@@ -98,12 +114,12 @@ public class GameListener implements Listener {
             }
 
             ev.setCancelled(true);
-            player.sendMessage(Color.parse("<red>¡No puedes romper bloques en este momento!"));
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.5f);
+            sendCooldownMessage(player, "<red>¡No puedes romper bloques en este momento!", Sound.BLOCK_ANVIL_PLACE, 1,
+                    2);
         } else {
             ev.setCancelled(true);
-            player.sendMessage(Color.parse("<red>¡No puedes romper bloques fuera de tu zona!"));
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.5f);
+            sendCooldownMessage(player, "<red>¡No puedes romper bloques fuera de tu área!", Sound.BLOCK_ANVIL_PLACE, 1,
+                    2);
         }
     }
 
@@ -111,6 +127,10 @@ public class GameListener implements Listener {
     public void onPlace(BlockPlaceEvent ev) {
         Player player = ev.getPlayer();
 
+        if (JBuildBattle.getInstance().getGameManager().isAllowALL()) {
+            return;
+        }
+
         if (player.hasPermission("jbuildbattle.bypass")) {
             return;
         }
@@ -125,17 +145,21 @@ public class GameListener implements Listener {
             }
 
             ev.setCancelled(true);
-            player.sendMessage(Color.parse("<red>¡No puedes colocar bloques en este momento!"));
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.5f);
+            sendCooldownMessage(player, "<red>¡No puedes colocar bloques en este momento!", Sound.BLOCK_ANVIL_PLACE, 1,
+                    2);
         } else {
             ev.setCancelled(true);
-            player.sendMessage(Color.parse("<red>¡No puedes colocar bloques fuera de tu zona!"));
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.5f);
+            sendCooldownMessage(player, "<red>¡No puedes colocar bloques fuera de tu área!", Sound.BLOCK_ANVIL_PLACE, 1,
+                    2);
         }
     }
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent ev) {
+        if (JBuildBattle.getInstance().getGameManager().isAllowALL()) {
+            return;
+        }
+
         if (ev.getDamager() instanceof Player) {
             Player player = (Player) ev.getDamager();
 
@@ -153,6 +177,17 @@ public class GameListener implements Listener {
     public void onInteract(PlayerInteractEvent ev) {
         Player player = ev.getPlayer();
 
+        if (player.hasPermission("jbuildbattle.copy") && player.isSneaking()) {
+            if (ev.getAction() == Action.RIGHT_CLICK_BLOCK && ev.getClickedBlock() != null) {
+                Block block = ev.getClickedBlock();
+                player.getInventory().setItemInMainHand(new ItemStack(block.getType(), 1));
+            }
+        }
+
+        if (JBuildBattle.getInstance().getGameManager().isAllowALL()) {
+            return;
+        }
+
         if (player.hasPermission("jbuildbattle.bypass")) {
             return;
         }
@@ -165,14 +200,13 @@ public class GameListener implements Listener {
 
         if (item.getType().toString().contains("EGG") || item.getType().toString().contains("SPAWN_EGG")) {
             ev.setCancelled(true);
-            player.sendMessage(Color.parse("<red>¡No puedes usar huevos de spawn!"));
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.5f);
+            sendCooldownMessage(player, "<red>¡No puedes usar huevos de generación!", Sound.BLOCK_ANVIL_PLACE, 1, 2);
         }
 
-        if (item.getType() == Material.FLINT_AND_STEEL && ev.getClickedBlock() != null && ev.getClickedBlock().getType() == Material.TNT) {
+        if (item.getType() == Material.FLINT_AND_STEEL && ev.getClickedBlock() != null
+                && ev.getClickedBlock().getType() == Material.TNT) {
             ev.setCancelled(true);
-            player.sendMessage(Color.parse("<red>¡No puedes encender TNT!"));
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.5f);
+            sendCooldownMessage(player, "<red>¡No puedes encender TNT!", Sound.BLOCK_ANVIL_PLACE, 1, 2);
         }
     }
 
@@ -181,6 +215,10 @@ public class GameListener implements Listener {
         Block fromBlock = ev.getBlock();
         Block toBlock = ev.getToBlock();
         Material fromType = fromBlock.getType();
+
+        if (JBuildBattle.getInstance().getGameManager().isAllowALL()) {
+            return;
+        }
 
         if (fromBlock == null || toBlock == null || fromType == null) {
             return;
@@ -196,6 +234,10 @@ public class GameListener implements Listener {
 
     @EventHandler
     public void onEntityMove(EntityMoveEvent ev) {
+        if (JBuildBattle.getInstance().getGameManager().isAllowALL()) {
+            return;
+        }
+
         if (!(ev.getEntity() instanceof Player)) {
             Location to = ev.getTo();
 
@@ -207,24 +249,59 @@ public class GameListener implements Listener {
 
     @EventHandler
     public void onExplote(EntityExplodeEvent ev) {
+        if (JBuildBattle.getInstance().getGameManager().isAllowALL()) {
+            return;
+        }
+
         ev.setCancelled(true);
     }
 
     @EventHandler
     public void onExplosionPrime(ExplosionPrimeEvent ev) {
+        if (JBuildBattle.getInstance().getGameManager().isAllowALL()) {
+            return;
+        }
         ev.setCancelled(true);
     }
 
     @EventHandler
     public void onBlockExplode(BlockExplodeEvent ev) {
+        if (JBuildBattle.getInstance().getGameManager().isAllowALL()) {
+            return;
+        }
         ev.setCancelled(true);
     }
 
     @EventHandler
     public void onEntitySpawn(EntitySpawnEvent ev) {
+        if (JBuildBattle.getInstance().getGameManager().isAllowALL()) {
+            return;
+        }
+
         if (ev.getEntity() instanceof Creature) {
             ev.getEntity().remove();
             ev.setCancelled(true);
+        }
+    }
+
+    private boolean isOnCooldown(Player player) {
+        if (!lastMessage.containsKey(player.getUniqueId())) {
+            return false;
+        }
+
+        long lastMessageTime = lastMessage.get(player.getUniqueId());
+        long currentTime = System.currentTimeMillis();
+
+        return (currentTime - lastMessageTime) < COOLDOWN_TIME;
+    }
+
+    private void sendCooldownMessage(Player player, String message, Sound sound, float volume, float pitch) {
+        if (!isOnCooldown(player)) {
+            player.sendMessage(Color.parse(message));
+            if (sound != null) {
+                player.playSound(player.getLocation(), sound, volume, pitch);
+            }
+            lastMessage.put(player.getUniqueId(), System.currentTimeMillis());
         }
     }
 

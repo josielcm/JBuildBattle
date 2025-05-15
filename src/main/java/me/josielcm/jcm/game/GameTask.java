@@ -47,39 +47,40 @@ public class GameTask extends BukkitRunnable {
                 break;
             case 9:
                 PlayerManager.sendTitle("<color:#ff7032><b>9", "", 0, 2, 0);
-                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 0.9f);
+                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f);
                 break;
             case 8:
                 PlayerManager.sendTitle("<color:#ffa02d><b>8", "", 0, 2, 0);
-                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 0.8f);
+                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f);
                 break;
             case 7:
                 PlayerManager.sendTitle("<color:#ffd027><b>7", "", 0, 2, 0);
-                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 0.7f);
+                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f);
                 break;
             case 6:
                 PlayerManager.sendTitle("<color:#fff12e><b>6", "", 0, 2, 0);
-                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 0.6f);
+                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f);
                 break;
             case 5:
                 PlayerManager.sendTitle("<color:#d5f940><b>5", "", 0, 2, 0);
-                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 0.5f);
+                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f);
                 break;
             case 4:
                 PlayerManager.sendTitle("<color:#abf252><b>4", "", 0, 2, 0);
-                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 0.4f);
+                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f);
                 break;
             case 3:
                 PlayerManager.sendTitle("<color:#81ea63><b>3", "", 0, 2, 0);
-                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 0.3f);
+                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 0.1f);
                 break;
             case 2:
                 PlayerManager.sendTitle("<color:#57e275><b>2", "", 0, 2, 0);
-                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 0.2f);
+                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 0.1f);
                 break;
             case 1:
                 PlayerManager.sendTitle("<color:#37ff30><b>1", "", 0, 2, 0);
-                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f, 0.5f);
+                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f, 0.1f);
+                BossBarManager.removeAllPlayers();
                 break;
             default:
                 break;

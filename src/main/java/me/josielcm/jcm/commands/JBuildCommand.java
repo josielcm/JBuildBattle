@@ -6,6 +6,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.CatchUnknown;
 import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.HelpCommand;
 import co.aikar.commands.annotation.Subcommand;
 import me.josielcm.jcm.JBuildBattle;
@@ -13,6 +14,7 @@ import me.josielcm.jcm.api.formats.Color;
 import me.josielcm.jcm.player.TeamType;
 
 @CommandAlias("jbuild")
+@CommandPermission("jbuild.admin")
 public class JBuildCommand extends BaseCommand {
 
     @Subcommand("start")
@@ -100,6 +102,16 @@ public class JBuildCommand extends BaseCommand {
         }
     }
 
+    @Subcommand("toggleall")
+    public void onToggleAllCommand(CommandSender sender) {
+        if (sender.hasPermission("jbuild.toggleall")) {
+            JBuildBattle.getInstance().getGameManager().toggleAll();
+            sender.sendMessage(Color.parse("<green>All events toggled!"));
+        } else {
+            sender.sendMessage(Color.parse("<red>You don't have permission to use this command."));
+        }
+    }
+
     @CatchUnknown
     public void onUnknownCommand(CommandSender sender) {
         sender.sendMessage(Color.parse("<gold><bold>----- Comandos JBuild Battle -----</bold>"));
@@ -115,6 +127,7 @@ public class JBuildCommand extends BaseCommand {
         sender.sendMessage(Color.parse("<gold><bold>----- Extras -----</bold>"));
         sender.sendMessage(Color.parse("<yellow>» <light_purple>/jbuild glow <yellow>- Activa/desactiva el brillo"));
         sender.sendMessage(Color.parse("<yellow>» <gold>/jbuild winner <pros|noobs> <yellow>- Establece el ganador"));
+        sender.sendMessage(Color.parse("<yellow>» <gold>/jbuild toggleall <yellow>- Habilitar todos los eventos"));
     }
 
     @HelpCommand

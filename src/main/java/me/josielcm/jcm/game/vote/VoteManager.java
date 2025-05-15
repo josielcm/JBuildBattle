@@ -45,7 +45,7 @@ public class VoteManager {
     private static VoteTask voteTask;
 
     @Setter
-    private static String voteMessage = "<yellow>Tiempo de votación</yellow> <grey>|</grey> <gold><b><time></b></gold>";
+    private static String voteMessage = "<yellow><b>Tiempo de votación</b></yellow> <grey>|</grey> <gold><b><time></b></gold>";
 
     @Getter
     private static Gui gui;
@@ -73,9 +73,9 @@ public class VoteManager {
             voteTask = null;
         }
 
-        String winner = getThemeWinner().getName();
-        PlayerManager.sendTitle("<color:#C8B273>" + winner, "", 1, 5, 1);
-        BossBarManager.updateText(Color.parse("<color:#C8B273>" + winner));
+        String winner = getThemeWinner().getNameColored();
+        PlayerManager.sendTitle(winner, "", 1, 5, 1);
+        BossBarManager.updateText(Color.parse(winner));
 
         JBuildBattle.getInstance().getGameManager().startGame(getThemeWinner());
 
@@ -84,7 +84,7 @@ public class VoteManager {
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.getInventory().clear();
             player.closeInventory();
-            player.sendMessage(Color.parse("<gold>¡Votación terminada!"));
+            player.sendMessage(Color.parse("<gold><b>¡Votación terminada!</b>"));
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 0.8f);
         });
     }
@@ -111,7 +111,7 @@ public class VoteManager {
 
     private static void openVoteMenu() {
         gui = Gui.gui()
-                .title(Color.parse("<gold><b>¡Vota por una tematica!</b><gold>"))
+                .title(Color.parse("<gold><b>¡Vota por una temática!</b><gold>"))
                 .rows(3)
                 .disableAllInteractions()
                 .create();
@@ -127,17 +127,17 @@ public class VoteManager {
     private static Map<GameTheme, GuiItem> createVoteItems() {
         Map<GameTheme, ItemStack> itemStacks = Map.of(
                 GameTheme.CITY,
-                createItemStack("Ciudad", "<gradient:#ECECEC:#FBFBFB>",
+                createItemStack("Ciudad", "<gradient:#ECECEC:#FBFBFB><b>",
                         "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjIzYWM5M2Q1ZTk5OTVkZTg0YWE5NWRlM2M4OWU0MDQyNTYwNjAzNGRkOGQ3NWNmZDcxOTYxNjA5YmQ1MjgxNSJ9fX0="),
                 GameTheme.CASTLE,
-                createItemStack("Castillo", "<gradient:#B5B5B5:#C1C1C1>",
+                createItemStack("Castillo", "<gradient:#B5B5B5:#C1C1C1><b>",
                         "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmVlZjdlNTZjZGU3NDA3NzJkZmI3NmRkZDJmNTg0YmU4OTA3Yjg1OTc2NjhlNDAyNjM0OTg2NDY5MjMwYWE0OSJ9fX0="),
                 GameTheme.LANDSCAPE,
-                createItemStack("Paisaje", "<gradient:#74FFFF:#98FF7C>",
+                createItemStack("Paisaje", "<gradient:#74FFFF:#98FF7C><b>",
                         "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjgwZDMyOTVkM2Q5YWJkNjI3NzZhYmNiOGRhNzU2ZjI5OGE1NDVmZWU5NDk4YzRmNjlhMWMyYzc4NTI0YzgyNCJ9fX0="),
                 GameTheme.COLOR,
                 createItemStack("Colorido",
-                        "<gradient:#FF6B6B:#FFAF70:#FFF275:#C7EE80:#8EEA8B:#6A9EFF:#7B4FFF:#8B00FF>",
+                        "<gradient:#FF6B6B:#FFAF70:#FFF275:#C7EE80:#8EEA8B:#6A9EFF:#7B4FFF:#8B00FF><b>",
                         "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWY1NzAxZGE0ZDUwZGQ0NDdlNjgzZGQ5MDA3N2NhMjJkNmI0NjEyZTVkYTEwODAzZTNjNDg2YzUyOTg3ZmVlZiJ9fX0="));
 
         return itemStacks.entrySet().stream()
@@ -170,7 +170,7 @@ public class VoteManager {
         }
 
         addVote(theme, player.getUniqueId());
-        player.sendMessage(Color.parse("<gold>¡Votaste por " + theme.getName() + "!"));
+        player.sendMessage(Color.parse("<gold>¡Has votado por " + theme.getName() + "!"));
         player.closeInventory();
     }
 

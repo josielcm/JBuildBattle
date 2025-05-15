@@ -54,6 +54,10 @@ public class GameManager {
 
     @Getter
     @Setter
+    private boolean allowALL = false;
+
+    @Getter
+    @Setter
     private boolean glow = false;
 
     public GameManager() {
@@ -70,8 +74,7 @@ public class GameManager {
 
         if (world == null) {
             JBuildBattle.getInstance().getLogger()
-                    .severe("¡No se pudo encontrar el mundo '" + worldName
-                            + "'! Asegúrate de que existe o que este bien escrito capo.");
+                    .severe("¡No se pudo encontrar el mundo '" + worldName + "'! Asegúrate de que existe o que esté bien escrito.");
             return;
         }
 
@@ -132,7 +135,7 @@ public class GameManager {
                     gameTask.runTaskTimer(JBuildBattle.getInstance(), 0L, 20L);
                     gameState = GameState.PLAYING;
                     changeGameMode(GameMode.CREATIVE);
-                    PlayerManager.sendTitle("<color:#C8B273>¡A construir!", "", 1, 5, 1);
+                    PlayerManager.sendTitle("<color:#C8B273><b>¡A construir!", "", 1, 5, 1);
                     PlayerManager.playSound(Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 0.8f);
                     cancel();
                     return;
@@ -158,13 +161,14 @@ public class GameManager {
         teleportPlayers();
         changeGameMode(GameMode.SPECTATOR);
         canLeaveZone = true;
+        BossBarManager.removeAllPlayers();
 
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.getInventory().clear();
         });
 
-        PlayerManager.sendTitle("<color:#C8B273>¡Se acabo el tiempo!", "", 1, 3, 1);
-        PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BELL, 1.0f, 0.8f);
+        PlayerManager.sendTitle("<color:#C8B273><b>¡Se acabó el tiempo!</b>", "", 1, 3, 1);
+        PlayerManager.playSound(Sound.BLOCK_ANVIL_PLACE, 1.0f, 2);
     }
 
     public void reset() {
@@ -200,6 +204,12 @@ public class GameManager {
         }
     }
 
+    public void toggleAll() {
+        allowALL = !allowALL;
+        String message = allowALL ? "<green><b>¡Se habilitó todos los eventos (caos)!</b>" : "<red><b>¡Se han deshabilitado todos los eventos (default)!</b>";
+        PlayerManager.sendTitle(message, "", 1, 3, 1);
+    }
+
     public void toggleGlow() {
         glow = !glow;
         Collection<? extends Player> players = Bukkit.getOnlinePlayers();
@@ -232,13 +242,13 @@ public class GameManager {
     public void win(TeamType team) {
         switch (team) {
             case PROS:
-                PlayerManager.sendTitle("<color:#C8B273>¡Los pros han ganado!", "", 1, 3, 1);
+                PlayerManager.sendTitle("<color:#C8B273><b>¡Los pros han ganado!</b>", "", 1, 3, 1);
                 PlayerManager.playSound(Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
                 launchFireworks(team);
 
                 break;
             case NOOBS:
-                PlayerManager.sendTitle("<color:#C8B273>¡Los noobs han ganado!", "", 1, 3, 1);
+                PlayerManager.sendTitle("<color:#C8B273><b>¡Los noobs han ganado!</b>", "", 1, 3, 1);
                 PlayerManager.playSound(Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
                 launchFireworks(team);
                 break;

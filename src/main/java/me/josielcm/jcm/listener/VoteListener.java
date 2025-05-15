@@ -40,29 +40,29 @@ public class VoteListener implements Listener {
                 case "CITY":
                     VoteManager.addVote(GameTheme.CITY, player.getUniqueId());
                     player.getInventory().clear();
-                    player.sendMessage(Color.parse("<gold>¡Votaste por la ciudad!"));
+                    player.sendMessage(Color.parse("<gold>¡Has votado por la Ciudad!"));
                     player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                     break;
                 case "CASTLE":
                     VoteManager.addVote(GameTheme.CASTLE, player.getUniqueId());
                     player.getInventory().clear();
-                    player.sendMessage(Color.parse("<gold>¡Votaste por el castillo!"));
+                    player.sendMessage(Color.parse("<gold>¡Has votado por el Castillo!"));
                     player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                     break;
                 case "LANDSCAPE":
                     VoteManager.addVote(GameTheme.LANDSCAPE, player.getUniqueId());
                     player.getInventory().clear();
-                    player.sendMessage(Color.parse("<gold>¡Votaste por el paisaje!"));
+                    player.sendMessage(Color.parse("<gold>¡Has votado por el Paisaje!"));
                     player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                     break;
                 case "COLOR":
                     VoteManager.addVote(GameTheme.COLOR, player.getUniqueId());
                     player.getInventory().clear();
-                    player.sendMessage(Color.parse("<gold>¡Votaste por el colorido!"));
+                    player.sendMessage(Color.parse("<gold>¡Has votado por el tema Colorido!"));
                     player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                     break;
                 default:
-                    player.sendMessage("Invalid vote option.");
+                    player.sendMessage(Color.parse("<red>¡Opción de voto inválida!"));
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
             }
         }

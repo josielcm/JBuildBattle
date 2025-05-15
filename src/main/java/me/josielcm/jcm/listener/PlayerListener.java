@@ -24,7 +24,7 @@ public class PlayerListener implements Listener {
         Player player = ev.getPlayer();
 
         BossBarManager.addPlayer(player);
-        ev.joinMessage(Color.parse("<gold>¡" + player.getName() + " se ha unido a la partida!"));
+        ev.joinMessage(Color.parse(""));
 
         if (player.hasPermission("jbuildbattle.bypass")) {
             player.sendMessage(Color.parse("<yellow>¡Tienes bypass del BuildBattle capo!"));
@@ -60,7 +60,7 @@ public class PlayerListener implements Listener {
         Player player = ev.getPlayer();
         PlayerManager.onLeave(player);
         TeamManager.removePlayerFromTeam(player);
-        ev.quitMessage(Color.parse("<red>¡" + player.getName() + " se ha ido de la partida!"));
+        ev.quitMessage(Color.parse(""));
     }
 
 }
