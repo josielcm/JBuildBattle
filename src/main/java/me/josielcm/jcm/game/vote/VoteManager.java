@@ -45,7 +45,7 @@ public class VoteManager {
     private static VoteTask voteTask;
 
     @Setter
-    private static String voteMessage = "<yellow><b>Tiempo de votación</b></yellow> <grey>|</grey> <gold><b><time></b></gold>";
+    private static String voteMessage = "<color:FFD04D><b>Tiempo de votación</b> <grey>|</grey> <color:FFD04D><b><time></b>";
 
     @Getter
     private static Gui gui;
@@ -169,7 +169,7 @@ public class VoteManager {
         }
 
         addVote(theme, player.getUniqueId());
-        player.sendMessage(Color.parse("<gold>¡Has votado por " + theme.getName() + "!"));
+        player.sendMessage(Color.parse("<green>¡Has votado por " + theme.getName() + "!", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         player.closeInventory();
     }
 

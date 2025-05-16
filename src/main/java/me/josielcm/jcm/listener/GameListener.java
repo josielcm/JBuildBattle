@@ -6,13 +6,13 @@ import java.util.UUID;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockFromToEvent;
@@ -21,6 +21,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -174,15 +175,17 @@ public class GameListener implements Listener {
     }
 
     @EventHandler
-    public void onInteract(PlayerInteractEvent ev) {
+    public void onDrop(PlayerDropItemEvent ev) {
         Player player = ev.getPlayer();
 
-        if (player.hasPermission("jbuildbattle.copy") && player.isSneaking()) {
-            if (ev.getAction() == Action.RIGHT_CLICK_BLOCK && ev.getClickedBlock() != null) {
-                Block block = ev.getClickedBlock();
-                player.getInventory().setItemInMainHand(new ItemStack(block.getType(), 1));
-            }
+        if (player.hasPermission("jbuildbattle.bypass")) {
+            ev.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent ev) {
+        Player player = ev.getPlayer();
 
         if (JBuildBattle.getInstance().getGameManager().isAllowALL()) {
             return;
@@ -261,7 +264,13 @@ public class GameListener implements Listener {
         if (JBuildBattle.getInstance().getGameManager().isAllowALL()) {
             return;
         }
+
+        Location loc = ev.getEntity().getLocation().clone();
+
         ev.setCancelled(true);
+        ev.getEntity().remove();
+
+        loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.5, 0.5, 0.5, 0.1);
     }
 
     @EventHandler

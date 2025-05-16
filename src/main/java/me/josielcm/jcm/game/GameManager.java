@@ -142,7 +142,7 @@ public class GameManager {
                 }
 
                 if (countdown.get() <= 5) {
-                    PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f, 0.5f);
+                    PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 0.5f);
                 }
 
                 BossBarManager.updateText(Color.parse("<color:#FFD04D><b>Iniciando en " + countdown.get() + "</b>"));
