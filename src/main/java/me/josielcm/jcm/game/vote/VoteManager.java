@@ -110,7 +110,7 @@ public class VoteManager {
 
     private static void openVoteMenu() {
         gui = Gui.gui()
-                .title(Color.parse("<gold><b>¡Vota por una temática!</b><gold>"))
+                .title(Color.parse("<color:#FFD04D><b>¡Vota por una temática!</b>"))
                 .rows(3)
                 .disableAllInteractions()
                 .create();

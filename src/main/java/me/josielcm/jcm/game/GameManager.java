@@ -142,7 +142,7 @@ public class GameManager {
                 }
 
                 if (countdown.get() <= 5) {
-                    PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 0.5f);
+                    PlayerManager.playSound(Sound.UI_BUTTON_CLICK, 1.0f, 1.0f);
                 }
 
                 BossBarManager.updateText(Color.parse("<color:#FFD04D><b>Iniciando en " + countdown.get() + "</b>"));
@@ -221,8 +221,15 @@ public class GameManager {
 
     public void toggleAll() {
         allowALL = !allowALL;
-        String message = allowALL ? "<green><b>¡Se habilitó todos los eventos (caos)!</b>" : "<red><b>¡Se han deshabilitado todos los eventos (default)!</b>";
+        String message = allowALL ? "<color:#FE3739><b>¡LIBEREN EL CAOS!" : "<red><b>¡Caos desactivado!";
+        if (allowALL) {
+            changeGameMode(GameMode.CREATIVE);
+        } else {
+            reset();
+        }
         PlayerManager.sendTitle(message, "", 1, 3, 1);
+        PlayerManager.playSound(Sound.BLOCK_FIRE_AMBIENT, 1, 0.1f);
+        PlayerManager.playSound(Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1, 1);
     }
 
     public void toggleGlow() {
@@ -381,7 +388,9 @@ public class GameManager {
 
     public void changeGameMode(GameMode gameMode) {
         Bukkit.getOnlinePlayers().forEach(player -> {
-            player.setGameMode(gameMode);
+            if (!player.hasPermission("jbuildbattle.bypass")) {
+                player.setGameMode(gameMode);
+            }
         });
     }
 

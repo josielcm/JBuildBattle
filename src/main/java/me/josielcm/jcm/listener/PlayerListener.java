@@ -16,6 +16,7 @@ import me.josielcm.jcm.game.vote.VoteManager;
 import me.josielcm.jcm.player.PlayerManager;
 import me.josielcm.jcm.player.TeamManager;
 import me.josielcm.jcm.ui.BossBarManager;
+import net.kyori.adventure.bossbar.BossBar;
 
 public class PlayerListener implements Listener {
     
@@ -31,6 +32,13 @@ public class PlayerListener implements Listener {
             return;
         }
 
+        BossBar emptyBar = BossBar.bossBar(
+                Color.parse(""),
+                0f,
+                BossBar.Color.YELLOW,
+                BossBar.Overlay.PROGRESS);
+
+        player.showBossBar(emptyBar);
         player.setAllowFlight(false);
         player.setFlying(false);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 10, true, false));
