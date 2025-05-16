@@ -297,7 +297,7 @@ public class GameListener implements Listener {
 
     private void sendCooldownMessage(Player player, String message, Sound sound, float volume, float pitch) {
         if (!isOnCooldown(player)) {
-            player.sendMessage(Color.parse(message));
+            player.sendMessage(Color.parse(message, "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
             if (sound != null) {
                 player.playSound(player.getLocation(), sound, volume, pitch);
             }

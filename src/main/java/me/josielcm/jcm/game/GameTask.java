@@ -79,7 +79,7 @@ public class GameTask extends BukkitRunnable {
                 break;
             case 1:
                 PlayerManager.sendTitle("<color:#37ff30><b>1", "", 0, 2, 0);
-                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f, 0.1f);
+                PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 0.1f);
                 BossBarManager.removeAllPlayers();
                 break;
             default:

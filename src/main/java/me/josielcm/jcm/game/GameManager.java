@@ -138,14 +138,14 @@ public class GameManager {
                     PlayerManager.sendTitle("<color:#C8B273><b>¡A construir!", "", 1, 5, 1);
                     PlayerManager.playSound(Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 0.8f);
                     cancel();
-                    return;
+                    return;// "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "
                 }
 
                 if (countdown.get() <= 5) {
                     PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f, 0.5f);
                 }
 
-                BossBarManager.updateText(Color.parse("<gold><b>Iniciando en " + countdown.get() + "</b>"));
+                BossBarManager.updateText(Color.parse("<color:#C8B273><b>Iniciando en " + countdown.get() + "</b>"));
                 countdown.decrementAndGet();
             }
         }.runTaskTimer(JBuildBattle.getInstance(), 0L, 20L);
@@ -181,6 +181,7 @@ public class GameManager {
         changeGameMode(GameMode.ADVENTURE);
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.getInventory().clear();
+            BossBarManager.updateText(Color.parse("<gold><b>Esperando</b></gold>"));
             BossBarManager.addPlayer(player);
         });
         PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BELL, 1.0f, 0.8f);
@@ -394,7 +395,6 @@ public class GameManager {
                     Location spawnLocation = (type == TeamType.PROS) ? Arena.getSpawnPros() : Arena.getSpawnNoobs();
 
                     player.teleport(spawnLocation);
-                    player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f);
                 }
 
                 index[0]++;

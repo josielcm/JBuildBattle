@@ -21,9 +21,9 @@ public class JBuildCommand extends BaseCommand {
     public void onStartCommand(CommandSender sender) {
         if (sender.hasPermission("jbuild.start")) {
             JBuildBattle.getInstance().getGameManager().start();
-            sender.sendMessage(Color.parse("<green>JBuild started!"));
+            sender.sendMessage(Color.parse("<green>JBuild started!", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         } else {
-            sender.sendMessage(Color.parse("<red>You don't have permission to use this command."));
+            sender.sendMessage(Color.parse("<red>You don't have permission to use this command.", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         }
     }
 
@@ -31,9 +31,9 @@ public class JBuildCommand extends BaseCommand {
     public void onStopCommand(CommandSender sender) {
         if (sender.hasPermission("jbuild.stop")) {
             JBuildBattle.getInstance().getGameManager().stop();
-            sender.sendMessage(Color.parse("<red>JBuild stopped!"));
+            sender.sendMessage(Color.parse("<red>JBuild stopped!", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         } else {
-            sender.sendMessage(Color.parse("<red>You don't have permission to use this command."));
+            sender.sendMessage(Color.parse("<red>You don't have permission to use this command.", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         }
     }
 
@@ -41,9 +41,9 @@ public class JBuildCommand extends BaseCommand {
     public void onResetCommand(CommandSender sender) {
         if (sender.hasPermission("jbuild.reset")) {
             JBuildBattle.getInstance().getGameManager().reset();
-            sender.sendMessage(Color.parse("<yellow>JBuild reset!"));
+            sender.sendMessage(Color.parse("<yellow>JBuild reset!", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         } else {
-            sender.sendMessage(Color.parse("<red>You don't have permission to use this command."));
+            sender.sendMessage(Color.parse("<red>You don't have permission to use this command.", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         }
     }
 
@@ -53,12 +53,12 @@ public class JBuildCommand extends BaseCommand {
             if (type.equalsIgnoreCase("pros") || type.equalsIgnoreCase("noobs")) {
 
                 JBuildBattle.getInstance().getGameManager().win(TeamType.valueOf(type.toUpperCase()));
-                sender.sendMessage(Color.parse("<green>Winner set to " + type + "!"));
+                sender.sendMessage(Color.parse("<green>Winner set to " + type + "!", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
             } else {
-                sender.sendMessage(Color.parse("<red>Invalid type! Use 'pros' or 'noobs'."));
+                sender.sendMessage(Color.parse("<red>Invalid type! Use 'pros' or 'noobs'.", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
             }
         } else {
-            sender.sendMessage(Color.parse("<red>You don't have permission to use this command."));
+            sender.sendMessage(Color.parse("<red>You don't have permission to use this command.", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         }
     }
 
@@ -66,9 +66,9 @@ public class JBuildCommand extends BaseCommand {
     public void onGlowCommand(CommandSender sender) {
         if (sender.hasPermission("jbuild.glow")) {
             JBuildBattle.getInstance().getGameManager().toggleGlow();
-            sender.sendMessage(Color.parse("<yellow>Glow toggled!"));
+            sender.sendMessage(Color.parse("<yellow>Glow toggled!", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         } else {
-            sender.sendMessage(Color.parse("<red>You don't have permission to use this command."));
+            sender.sendMessage(Color.parse("<red>You don't have permission to use this command.", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         }
     }
 
@@ -76,9 +76,9 @@ public class JBuildCommand extends BaseCommand {
     public void onAddTimeCommand(CommandSender sender, int time) {
         if (sender.hasPermission("jbuild.addtime")) {
             JBuildBattle.getInstance().getGameManager().addTime(time);
-            sender.sendMessage(Color.parse("<green>Added " + time + " seconds!"));
+            sender.sendMessage(Color.parse("<green>Added " + time + " seconds!", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         } else {
-            sender.sendMessage(Color.parse("<red>You don't have permission to use this command."));
+            sender.sendMessage(Color.parse("<red>You don't have permission to use this command.", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         }
     }
 
@@ -86,9 +86,9 @@ public class JBuildCommand extends BaseCommand {
     public void onRemoveTimeCommand(CommandSender sender, int time) {
         if (sender.hasPermission("jbuild.removetime")) {
             JBuildBattle.getInstance().getGameManager().removeTime(time);
-            sender.sendMessage(Color.parse("<red>Removed " + time + " seconds!"));
+            sender.sendMessage(Color.parse("<red>Removed " + time + " seconds!", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         } else {
-            sender.sendMessage(Color.parse("<red>You don't have permission to use this command."));
+            sender.sendMessage(Color.parse("<red>You don't have permission to use this command.", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         }
     }
 
@@ -96,9 +96,9 @@ public class JBuildCommand extends BaseCommand {
     public void onSetTimeCommand(CommandSender sender, int time) {
         if (sender.hasPermission("jbuild.settime")) {
             JBuildBattle.getInstance().getGameManager().setTime(time);
-            sender.sendMessage(Color.parse("<yellow>Set time to " + time + " seconds!"));
+            sender.sendMessage(Color.parse("<yellow>Set time to " + time + " seconds!", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         } else {
-            sender.sendMessage(Color.parse("<red>You don't have permission to use this command."));
+            sender.sendMessage(Color.parse("<red>You don't have permission to use this command.", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         }
     }
 
@@ -106,9 +106,9 @@ public class JBuildCommand extends BaseCommand {
     public void onToggleAllCommand(CommandSender sender) {
         if (sender.hasPermission("jbuild.toggleall")) {
             JBuildBattle.getInstance().getGameManager().toggleAll();
-            sender.sendMessage(Color.parse("<green>All events toggled!"));
+            sender.sendMessage(Color.parse("<green>All events toggled!", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         } else {
-            sender.sendMessage(Color.parse("<red>You don't have permission to use this command."));
+            sender.sendMessage(Color.parse("<red>You don't have permission to use this command.", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         }
     }
 

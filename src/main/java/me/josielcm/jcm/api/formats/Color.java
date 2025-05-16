@@ -68,9 +68,19 @@ public class Color {
      * @return The parsed component
      */
     public static Component parse(@NotNull String message) {
-        return MINI_MESSAGE.deserialize("<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> " + message);
+        return MINI_MESSAGE.deserialize(message);
     }
 
+    /**
+     * Parses a string with MiniMessage format.
+     * 
+     * @param message The message to parse
+     * @param prefix The prefix to add before the message
+     * @return The parsed component with prefix
+     */
+    public static Component parse(@NotNull String message,@NotNull String prefix) {
+        return MINI_MESSAGE.deserialize(prefix + message);
+    }
     /**
      * Serializes a component to MiniMessage format.
      * 
