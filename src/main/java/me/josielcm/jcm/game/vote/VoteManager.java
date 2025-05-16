@@ -84,7 +84,6 @@ public class VoteManager {
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.getInventory().clear();
             player.closeInventory();
-            player.sendMessage(Color.parse("<gold><b>¡Votación terminada!</b>"));
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 0.8f);
         });
     }

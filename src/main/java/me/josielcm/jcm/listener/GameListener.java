@@ -39,7 +39,7 @@ public class GameListener implements Listener {
     @Getter
     private static HashMap<UUID, Long> lastMessage = new HashMap<>();
 
-    private static final long COOLDOWN_TIME = 2000;
+    private static final long COOLDOWN_TIME = 5000;
 
     @EventHandler
     public void onMove(PlayerMoveEvent ev) {

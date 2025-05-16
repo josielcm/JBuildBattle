@@ -135,7 +135,7 @@ public class GameManager {
                     gameTask.runTaskTimer(JBuildBattle.getInstance(), 0L, 20L);
                     gameState = GameState.PLAYING;
                     changeGameMode(GameMode.CREATIVE);
-                    PlayerManager.sendTitle("<color:#C8B273><b>¡A construir!", "", 1, 5, 1);
+                    PlayerManager.sendTitle("<color:#FFD04D><b>¡A construir!", "", 1, 5, 1);
                     PlayerManager.playSound(Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 0.8f);
                     cancel();
                     return;// "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "
@@ -145,7 +145,7 @@ public class GameManager {
                     PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f, 0.5f);
                 }
 
-                BossBarManager.updateText(Color.parse("<color:#C8B273><b>Iniciando en " + countdown.get() + "</b>"));
+                BossBarManager.updateText(Color.parse("<color:#FFD04D><b>Iniciando en " + countdown.get() + "</b>"));
                 countdown.decrementAndGet();
             }
         }.runTaskTimer(JBuildBattle.getInstance(), 0L, 20L);
@@ -167,7 +167,7 @@ public class GameManager {
             player.getInventory().clear();
         });
 
-        PlayerManager.sendTitle("<color:#C8B273><b>¡Se acabó el tiempo!</b>", "", 1, 3, 1);
+        PlayerManager.sendTitle("<color:#FFD04D><b>¡Se acabó el tiempo!</b>", "", 1, 3, 1);
         PlayerManager.playSound(Sound.BLOCK_ANVIL_PLACE, 1.0f, 2);
     }
 
@@ -181,7 +181,7 @@ public class GameManager {
         changeGameMode(GameMode.ADVENTURE);
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.getInventory().clear();
-            BossBarManager.updateText(Color.parse("<gold><b>Esperando</b></gold>"));
+            BossBarManager.updateText(Color.parse("<color:#FFD04D><b>Esperando</b></color>"));
             BossBarManager.addPlayer(player);
         });
         PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BELL, 1.0f, 0.8f);
@@ -190,18 +190,32 @@ public class GameManager {
     public void addTime(int time) {
         if (gameTask != null) {
             gameTask.addTime(time);
+            if (gameTask.getTime().get() > 10) {
+                Bukkit.getOnlinePlayers().forEach(player -> {
+                    BossBarManager.addPlayer(player);
+                });
+            }
         }
     }
 
     public void removeTime(int time) {
         if (gameTask != null) {
             gameTask.removeTime(time);
+
+            if (gameTask.getTime().get() <= 10) {
+                BossBarManager.removeAllPlayers();
+            }
         }
     }
 
     public void setTime(int time) {
         if (gameTask != null) {
             gameTask.setTime(time);
+            if (gameTask.getTime().get() > 10) {
+                Bukkit.getOnlinePlayers().forEach(player -> {
+                    BossBarManager.addPlayer(player);
+                });
+            }
         }
     }
 
@@ -243,13 +257,13 @@ public class GameManager {
     public void win(TeamType team) {
         switch (team) {
             case PROS:
-                PlayerManager.sendTitle("<color:#C8B273><b>¡Los pros han ganado!</b>", "", 1, 3, 1);
+                PlayerManager.sendTitle("<color:#FFD04D><b>¡Los pros han ganado!</b>", "", 1, 3, 1);
                 PlayerManager.playSound(Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
                 launchFireworks(team);
 
                 break;
             case NOOBS:
-                PlayerManager.sendTitle("<color:#C8B273><b>¡Los noobs han ganado!</b>", "", 1, 3, 1);
+                PlayerManager.sendTitle("<color:#FFD04D><b>¡Los noobs han ganado!</b>", "", 1, 3, 1);
                 PlayerManager.playSound(Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
                 launchFireworks(team);
                 break;

@@ -13,7 +13,6 @@ import me.josielcm.jcm.commands.JBuildCommand;
 import me.josielcm.jcm.game.GameManager;
 import me.josielcm.jcm.listener.GameListener;
 import me.josielcm.jcm.listener.PlayerListener;
-import me.josielcm.jcm.listener.VoteListener;
 
 import java.util.Arrays;
 import java.util.List;
@@ -74,7 +73,6 @@ public final class JBuildBattle extends JavaPlugin {
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new GameListener(), this);
-        getServer().getPluginManager().registerEvents(new VoteListener(), this);
     }
 
     private void setupCommands() {

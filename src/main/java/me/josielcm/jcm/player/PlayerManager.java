@@ -32,11 +32,9 @@ public class PlayerManager {
         if (player.hasPermission("jbuildbattle.team.pro")) {
             players.put(player.getUniqueId(), TeamType.PROS);
             player.teleport(Arena.getSpawnPros());
-            player.sendMessage(Color.parse("<gold>¡Estás en el equipo PRO!"));
         } else {
             players.put(player.getUniqueId(), TeamType.NOOBS);
             player.teleport(Arena.getSpawnNoobs());
-            player.sendMessage(Color.parse("<aqua>¡Estás en el equipo de 100!"));
         }
 
         TeamManager.addPlayerToTeam(player, players.get(player.getUniqueId()));
