@@ -25,6 +25,7 @@ import me.josielcm.jcm.player.TeamManager;
 import me.josielcm.jcm.ui.BossBarManager;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public class PlayerListener implements Listener {
 
@@ -85,11 +86,11 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onChat(AsyncChatEvent ev) {
         Player player = ev.getPlayer();
-        Component message = ev.message();
+        Component message = formatMessage(player, ev.message());
         ev.setCancelled(true);
 
         if (isOnCooldown(player)) {
-            player.sendMessage(Color.parse("<red>Debes esperar para enviar otro mensaje.", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
+            player.sendMessage(Color.parse("<red>¡Debes esperar para enviar otro mensaje!</red>"));
             return;
         }
 
@@ -113,8 +114,8 @@ public class PlayerListener implements Listener {
     }
 
     private enum ChatFormat {
-        ADMIN("<gold>", ""),
-        DEFAULT("<grey>", "");
+        ADMIN("<gold>", "<gray>"),
+        DEFAULT("<gray>", "<gray>");
 
         private final String nameColor;
         private final String messageColor;
@@ -125,8 +126,12 @@ public class PlayerListener implements Listener {
         }
 
         public Component format(String prefix, String name, Component message) {
-            return Color.parse(prefix + nameColor + name + " <dark_grey>» " + messageColor)
-                    .append(message);
+            return Component.empty()
+                .append(Color.parse(prefix))
+                .append(Color.parse(nameColor + name + "</"+nameColor.substring(1)))
+                .append(Color.parse(" <dark_gray>»</dark_gray> "))
+                .append(Color.parse(messageColor))
+                .append(message);
         }
     }
 
@@ -135,6 +140,16 @@ public class PlayerListener implements Listener {
             return ChatFormat.ADMIN;
         }
         return ChatFormat.DEFAULT;
+    }
+
+    private Component formatMessage(Player player, Component message) {
+        String plainText = PlainTextComponentSerializer.plainText().serialize(message);
+        
+        if (player.hasPermission("jbuildbattle.chat.format")) {
+            return Color.parse(plainText);
+        }
+        
+        return Component.text(plainText.replace("<", "＜").replace(">", "＞"));
     }
 
 }
