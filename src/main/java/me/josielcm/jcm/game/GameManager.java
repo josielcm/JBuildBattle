@@ -125,7 +125,7 @@ public class GameManager {
         this.gameTheme = gameTheme;
         this.gameState = GameState.STARTING;
 
-        final AtomicInteger countdown = new AtomicInteger(10);
+        final AtomicInteger countdown = new AtomicInteger(20);
 
         task = new BukkitRunnable() {
             @Override
@@ -133,6 +133,7 @@ public class GameManager {
                 if (countdown.get() <= 0) {
                     new BukkitRunnable() {
                         public void run() {
+                            canLeaveZone = false;
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 20");
                             gameTask = new GameTask(3600);
                             gameTask.setMessage(FileManager.getMessages().getString("bossbar-timer"));
@@ -155,13 +156,16 @@ public class GameManager {
                     }.runTask(JBuildBattle.getInstance());
                 }
 
-                if (countdown.get() == 10) {
+                if (countdown.get() == 19) {
                     new BukkitRunnable() {
                         public void run() {
+
                             try {
+                                canLeaveZone = true;
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 40");
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                                         "cinematic start * cinematic_4238 480 80 1");
+
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
