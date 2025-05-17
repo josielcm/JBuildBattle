@@ -37,6 +37,9 @@ public class PlayerListener implements Listener {
     @Getter
     private static Set<UUID> mutedPlayers = new HashSet<>();
 
+    @Getter
+    private static HashMap<UUID, Long> cooldownCommand = new HashMap<>();
+
     @EventHandler
     public void onJoin(PlayerJoinEvent ev) {
         Player player = ev.getPlayer();

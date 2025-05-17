@@ -177,16 +177,19 @@ public class VoteManager {
         });
     }
 
-    private static void handleVote(HumanEntity player, GameTheme theme) {
-        if (playersVoted.contains(player.getUniqueId())) {
-            player.sendMessage(Color.parse("<red>¡Ya has votado!"));
-            gui.close(player);
+    private static void handleVote(HumanEntity playerH, GameTheme theme) {
+        if (playersVoted.contains(playerH.getUniqueId())) {
+            playerH.sendMessage(Color.parse("<red>¡Ya has votado!"));
+            gui.close(playerH);
             return;
         }
+
+        Player player = (Player) playerH;
 
         addVote(theme, player.getUniqueId());
         player.sendMessage(Color.parse("<green>¡Has votado por " + theme.getName() + "!",
                 "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
         player.closeInventory();
     }
 

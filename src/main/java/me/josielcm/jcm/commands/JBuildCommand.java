@@ -156,12 +156,18 @@ public class JBuildCommand extends BaseCommand {
             return;
         }
 
+        if (isOnCooldown(player)) {
+            player.sendMessage(Color.parse("<red>¡Tienes que esperar para mandar otro reporte!</red>", PREFIX));
+            return;
+        }
+
         String message = String.join(" ", args);
         String reportMessage = "<red><b>REPORTE</b></red> <grey>»</grey> " +
                              "<yellow>" + player.getName() + "</yellow> " +
                              "<grey>reportó:</grey> " + message;
 
         Bukkit.broadcast(Color.parse(reportMessage), "jbuild.admin.mute");
+        PlayerListener.getCooldownCommand().put(player.getUniqueId(), System.currentTimeMillis());
         player.sendMessage(Color.parse("<green>¡Tu reporte ha sido enviado al staff!</green>", PREFIX));
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
     }
@@ -186,6 +192,17 @@ public class JBuildCommand extends BaseCommand {
         sender.sendMessage(Color.parse("<light_purple><b>----- Moderación -----</b>"));
         sender.sendMessage(Color.parse("<yellow>» <light_purple>/jbuild mute <jugador></light_purple> <yellow>- Silencia/Desilencia a un jugador</yellow>"));
         sender.sendMessage(Color.parse("<yellow>» <light_purple>/reportar <mensaje></light_purple> <yellow>- Envía un reporte al staff</yellow>"));
+    }
+
+    private boolean isOnCooldown(Player player) {
+        if (!PlayerListener.getCooldownCommand().containsKey(player.getUniqueId())) {
+            return false;
+        }
+
+        long lastMessageTime = PlayerListener.getCooldownCommand().get(player.getUniqueId());
+        long currentTime = System.currentTimeMillis();
+
+        return (currentTime - lastMessageTime) < 5000;
     }
 
     @HelpCommand
