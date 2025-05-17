@@ -125,7 +125,7 @@ public class GameManager {
         this.gameTheme = gameTheme;
         this.gameState = GameState.STARTING;
 
-        final AtomicInteger countdown = new AtomicInteger(50);
+        final AtomicInteger countdown = new AtomicInteger(25);
 
         task = new BukkitRunnable() {
             @Override
