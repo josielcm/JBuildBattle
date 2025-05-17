@@ -140,6 +140,7 @@ public class GameManager {
                             gameTask.runTaskTimer(JBuildBattle.getInstance(), 0L, 20L);
                             gameState = GameState.PLAYING;
                             changeGameMode(GameMode.CREATIVE);
+                            BossBarManager.addAllPlayers();
                             PlayerManager.sendTitle("<color:#FFD04D><b>¡A construir!", "", 1, 5, 1);
                             PlayerManager.playSound(Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 0.8f);
                         };
@@ -162,6 +163,7 @@ public class GameManager {
 
                             try {
                                 canLeaveZone = true;
+                                BossBarManager.removeAllPlayers();
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 40");
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                                         "cinematic start * cinematic_4238 480 80 1");
@@ -186,14 +188,15 @@ public class GameManager {
             gameState = GameState.ENDED;
         }
 
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.getInventory().clear();
+        });
+
         teleportPlayers();
         changeGameMode(GameMode.SPECTATOR);
         canLeaveZone = true;
         BossBarManager.removeAllPlayers();
-
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            player.getInventory().clear();
-        });
+        BossBarManager.updateText(Color.parse("<color:#FFD04D><b>¡Se acabó el tiempo!</b>"));
 
         PlayerManager.sendTitle("<color:#FFD04D><b>¡Se acabó el tiempo!</b>", "", 1, 3, 1);
         PlayerManager.playSound(Sound.BLOCK_ANVIL_PLACE, 1.0f, 2);
@@ -207,11 +210,8 @@ public class GameManager {
 
         teleportPlayers();
         changeGameMode(GameMode.ADVENTURE);
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            player.getInventory().clear();
-            BossBarManager.updateText(Color.parse("<color:#FFD04D><b>Esperando</b></color>"));
-            BossBarManager.addPlayer(player);
-        });
+        BossBarManager.updateText(Color.parse("<color:#FFD04D><b>Esperando</b></color>"));
+        BossBarManager.addAllPlayers();
         PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_BELL, 1.0f, 0.8f);
     }
 
@@ -292,13 +292,15 @@ public class GameManager {
     public void win(TeamType team) {
         switch (team) {
             case PROS:
-                PlayerManager.sendTitle("<color:#FFD04D><b>¡Los pros han ganado!</b>", "", 1, 3, 1);
+                PlayerManager.sendTitle("<color:#FFD04D><b>¡Los <color:#5C93FC>pros</color> han ganado!</b>", "", 1, 3,
+                        1);
                 PlayerManager.playSound(Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
                 launchFireworks(team);
 
                 break;
             case NOOBS:
-                PlayerManager.sendTitle("<color:#FFD04D><b>¡Los noobs han ganado!</b>", "", 1, 3, 1);
+                PlayerManager.sendTitle("<color:#FFD04D><b>¡Los <color:#FC5C5C>100</color> han ganado!</b>", "", 1, 3,
+                        1);
                 PlayerManager.playSound(Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
                 launchFireworks(team);
                 break;
@@ -310,7 +312,7 @@ public class GameManager {
     private void launchFireworks(TeamType team) {
         switch (team) {
             case PROS:
-                final AtomicInteger countdown = new AtomicInteger(20);
+                final AtomicInteger countdown = new AtomicInteger(30);
                 Set<UUID> prosPlayers = PlayerManager.getPlayers().keySet().stream()
                         .filter(uuid -> {
                             Player player = Bukkit.getPlayer(uuid);
@@ -340,7 +342,7 @@ public class GameManager {
                 break;
 
             case NOOBS:
-                final AtomicInteger noobsCountdown = new AtomicInteger(10);
+                final AtomicInteger noobsCountdown = new AtomicInteger(20);
                 Set<UUID> noobsPlayers = PlayerManager.getPlayers().keySet().stream()
                         .filter(uuid -> {
                             Player player = Bukkit.getPlayer(uuid);
@@ -408,7 +410,7 @@ public class GameManager {
                 .build();
 
         meta.addEffect(effect);
-        meta.setPower(2);
+        meta.setPower(random.nextInt(1, 3));
         firework.setFireworkMeta(meta);
 
         location.getWorld().playSound(location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 1.0f);
@@ -454,6 +456,8 @@ public class GameManager {
     }
 
     private void cancelGameTaskIfRunning() {
+        VoteManager.forceStop();
+
         if (gameTask != null) {
             gameTask.cancel();
             gameTask = null;

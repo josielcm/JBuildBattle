@@ -17,7 +17,7 @@ public class BossBarManager {
 
     public BossBarManager() {
         bossBar = BossBar.bossBar(
-                Color.parse("<gold><b>Esperando</b></gold>"),
+                Color.parse("<color:#FFD04D><b>Esperando</b></color>"),
                 0f,
                 BossBar.Color.YELLOW,
                 BossBar.Overlay.PROGRESS);
@@ -30,7 +30,7 @@ public class BossBarManager {
     public static void addPlayer(Player player) {
         if (bossBar == null) {
             bossBar = BossBar.bossBar(
-                Color.parse("<gold><b>Esperando</b></gold>"),
+                Color.parse("<color:#FFD04D><b>Esperando</b></color>"),
                 0f,
                 BossBar.Color.YELLOW,
                 BossBar.Overlay.PROGRESS);
@@ -42,6 +42,12 @@ public class BossBarManager {
 
     public static void removePlayer(Player player) {
         player.hideBossBar(bossBar);
+    }
+
+    public static void addAllPlayers() {
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            addPlayer(player);
+        });
     }
 
     public static void removeAllPlayers() {

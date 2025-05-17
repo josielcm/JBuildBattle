@@ -87,6 +87,22 @@ public class VoteManager {
         });
     }
 
+    public static void forceStop() {
+        if (voteTask != null) {
+            voteTask.cancel();
+            voteTask = null;
+        }
+
+        playersVoted.clear();
+        votes.replaceAll((k, v) -> 0);
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.getInventory().clear();
+            player.closeInventory();
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 0.8f);
+        });
+    }
+
     public static void addVote(GameTheme theme, UUID player) {
         if (playersVoted.contains(player)) {
             return;

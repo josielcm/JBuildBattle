@@ -1,6 +1,8 @@
 package me.josielcm.jcm.listener;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -32,17 +34,15 @@ public class PlayerListener implements Listener {
     @Getter
     private HashMap<UUID, Long> cooldownMessage = new HashMap<>();
 
+    @Getter
+    private static Set<UUID> mutedPlayers = new HashSet<>();
+
     @EventHandler
     public void onJoin(PlayerJoinEvent ev) {
         Player player = ev.getPlayer();
 
         BossBarManager.addPlayer(player);
         ev.joinMessage(Color.parse(""));
-
-        if (player.hasPermission("jbuildbattle.bypass")) {
-            player.sendMessage(Color.parse("<yellow>¡Tienes bypass del BuildBattle capo!"));
-            return;
-        }
 
         BossBar emptyBar = BossBar.bossBar(
                 Color.parse(""),
@@ -51,21 +51,29 @@ public class PlayerListener implements Listener {
                 BossBar.Overlay.PROGRESS);
 
         player.showBossBar(emptyBar);
-        player.setAllowFlight(false);
-        player.setFlying(false);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 10, true, false));
         player.getInventory().clear();
 
-        GameState gameState = JBuildBattle.getInstance().getGameManager().getGameState();
-
-        if (gameState == GameState.PLAYING) {
-            player.setGameMode(GameMode.CREATIVE);
-        } else {
-            player.setGameMode(GameMode.ADVENTURE);
+        if (player.hasPermission("jbuildbattle.bypass")) {
+            player.sendMessage(Color.parse("<yellow>¡Tienes bypass del BuildBattle capo!"));
+            return;
         }
 
-        if (gameState == GameState.VOTING) {
-            VoteManager.openVoteMenu(player);
+        GameState gameState = JBuildBattle.getInstance().getGameManager().getGameState();
+
+        switch (gameState) {
+            case PLAYING:
+                player.setGameMode(GameMode.CREATIVE);
+                break;
+            case ENDED:
+                player.setGameMode(GameMode.SPECTATOR);
+                break;
+            case VOTING:
+                VoteManager.openVoteMenu(player);
+            case WAITING:
+            default:
+                player.setGameMode(GameMode.ADVENTURE);    
+                break;
         }
 
         if (JBuildBattle.getInstance().getGameManager().isGlow()) {
@@ -89,8 +97,15 @@ public class PlayerListener implements Listener {
         Component message = formatMessage(player, ev.message());
         ev.setCancelled(true);
 
+        if (mutedPlayers.contains(player.getUniqueId())) {
+            player.sendMessage(Color.parse("<red>¡No puedes hablar, un moderador te silecio!</red>",
+                    "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
+            return;
+        }
+
         if (isOnCooldown(player)) {
-            player.sendMessage(Color.parse("<red>¡Debes esperar para enviar otro mensaje!</red>", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
+            player.sendMessage(Color.parse("<red>¡Debes esperar para enviar otro mensaje!</red>",
+                    "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
             return;
         }
 
@@ -115,7 +130,7 @@ public class PlayerListener implements Listener {
 
     private enum ChatFormat {
         ADMIN("<gold>", "<gray>"),
-        PROS("<color:#5C93FC", "<gray>"),
+        PROS("<color:#5C93FC>", "<gray>"),
         DEFAULT("<color:#FC5C5C>", "<gray>");
 
         private final String nameColor;
@@ -128,11 +143,11 @@ public class PlayerListener implements Listener {
 
         public Component format(String prefix, String name, Component message) {
             return Component.empty()
-                .append(Color.parse(prefix))
-                .append(Color.parse(nameColor + name + "</"+nameColor.substring(1)))
-                .append(Color.parse(" <dark_gray>»</dark_gray> "))
-                .append(Color.parse(messageColor))
-                .append(message);
+                    .append(Color.parse(prefix))
+                    .append(Color.parse(nameColor + name + "</" + nameColor.substring(1)))
+                    .append(Color.parse(" <dark_gray>»</dark_gray> "))
+                    .append(Color.parse(messageColor))
+                    .append(message);
         }
     }
 
@@ -147,11 +162,11 @@ public class PlayerListener implements Listener {
 
     private Component formatMessage(Player player, Component message) {
         String plainText = PlainTextComponentSerializer.plainText().serialize(message);
-        
+
         if (player.hasPermission("jbuildbattle.chat.format")) {
             return Color.parse(plainText);
         }
-        
+
         return Component.text(plainText.replace("<", "＜").replace(">", "＞"));
     }
 
