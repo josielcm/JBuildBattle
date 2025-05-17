@@ -140,6 +140,7 @@ public class GameManager {
                             gameTask.runTaskTimer(JBuildBattle.getInstance(), 0L, 20L);
                             gameState = GameState.PLAYING;
                             changeGameMode(GameMode.CREATIVE);
+                            BossBarManager.addAllPlayers();
                             PlayerManager.sendTitle("<color:#FFD04D><b>¡A construir!", "", 1, 5, 1);
                             PlayerManager.playSound(Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 0.8f);
                         };
@@ -148,7 +149,7 @@ public class GameManager {
                     return;
                 }
 
-                if (countdown.get() == 25) {
+                if (countdown.get() == 35) {
                     new BukkitRunnable() {
                         public void run() {
 
@@ -157,7 +158,7 @@ public class GameManager {
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 80");
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                                         "cinematic start * cinematic_4238 960 80 1");
-
+                                BossBarManager.removeAllPlayers();
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
