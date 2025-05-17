@@ -82,7 +82,7 @@ public class VoteManager {
         votes.replaceAll((k, v) -> 0);
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.getInventory().clear();
-            player.closeInventory();
+            gui.close(player);
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 0.8f);
         });
     }
@@ -217,14 +217,16 @@ public class VoteManager {
                 return;
             }
 
-            Bukkit.getScheduler().runTaskLater(JBuildBattle.getInstance(), () -> {
-                try {
-                    player.closeInventory();
-                    gui.open(player);
-                } catch (Exception e) {
-                    Bukkit.getLogger().severe("Error reopening GUI: " + e.getMessage());
-                }
-            }, 1L);
+            if (voteTask != null) {
+                Bukkit.getScheduler().runTaskLater(JBuildBattle.getInstance(), () -> {
+                    try {
+                        player.closeInventory();
+                        gui.open(player);
+                    } catch (Exception e) {
+                        Bukkit.getLogger().severe("Error reopening GUI: " + e.getMessage());
+                    }
+                }, 1L);
+            }
         } catch (Exception e) {
             Bukkit.getLogger().severe("Error handling GUI close: " + e.getMessage());
         }
