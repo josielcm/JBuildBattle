@@ -156,7 +156,7 @@ public class GameManager {
                     }.runTask(JBuildBattle.getInstance());
                 }
 
-                if (countdown.get() == 19) {
+                if (countdown.get() == 34) {
                     new BukkitRunnable() {
                         public void run() {
 
