@@ -125,7 +125,7 @@ public class GameManager {
         this.gameTheme = gameTheme;
         this.gameState = GameState.STARTING;
 
-        final AtomicInteger countdown = new AtomicInteger(34);
+        final AtomicInteger countdown = new AtomicInteger(25);
 
         task = new BukkitRunnable() {
             @Override
@@ -156,7 +156,7 @@ public class GameManager {
                     }.runTask(JBuildBattle.getInstance());
                 }
 
-                if (countdown.get() == 34) {
+                if (countdown.get() == 25) {
                     new BukkitRunnable() {
                         public void run() {
 
