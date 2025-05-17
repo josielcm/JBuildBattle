@@ -9,6 +9,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.CatchUnknown;
 import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.HelpCommand;
 import co.aikar.commands.annotation.Subcommand;
@@ -129,7 +130,8 @@ public class JBuildCommand extends BaseCommand {
 
     @Subcommand("mute")
     @CommandPermission("jbuild.admin.mute")
-    public void onMute(CommandSender sender, String playerName) {
+    @CommandCompletion("@players")
+    public void onMute(CommandSender sender, String playerName, ToggleEnum toggle) {
         Player target = Bukkit.getPlayerExact(playerName);
 
         if (target == null || !target.isOnline()) {
@@ -137,16 +139,29 @@ public class JBuildCommand extends BaseCommand {
             return;
         }
 
-        if (PlayerListener.getMutedPlayers().contains(target.getUniqueId())) {
-            PlayerListener.getMutedPlayers().remove(target.getUniqueId());
-            sender.sendMessage(Color.parse("<green>¡Se ha removido el silencio al jugador!</green>", PREFIX));
-            target.sendMessage(Color.parse("<green>¡La restricción del chat ha sido removida!</green>", PREFIX));
-            return;
-        }
+        switch (toggle) {
+            case ON:
+                if (PlayerListener.getMutedPlayers().contains(target.getUniqueId())) {
+                    sender.sendMessage(Color.parse("<red>¡El jugador ya esta silenciado!</red>", PREFIX));
+                    return;
+                }
 
-        PlayerListener.getMutedPlayers().add(target.getUniqueId());
-        target.sendMessage(Color.parse("<red>¡Un moderador te ha silenciado!</red>", PREFIX));
-        sender.sendMessage(Color.parse("<green>¡El jugador " + target.getName() + " ha sido silenciado!</green>", PREFIX));
+                PlayerListener.getMutedPlayers().add(target.getUniqueId());
+                target.sendMessage(Color.parse("<red>¡Un moderador te ha silenciado!</red>", PREFIX));
+                sender.sendMessage(Color.parse("<green>¡El jugador " + target.getName() + " ha sido silenciado!</green>", PREFIX));
+                break;
+            case OFF:
+                if (!PlayerListener.getMutedPlayers().contains(target.getUniqueId())) {
+                    sender.sendMessage(Color.parse("<red>¡El jugador no esta silenciado!</red>", PREFIX));
+                    return;
+                }
+
+                PlayerListener.getMutedPlayers().remove(target.getUniqueId());
+                sender.sendMessage(Color.parse("<green>¡Se ha removido el silencio al jugador!</green>", PREFIX));
+                target.sendMessage(Color.parse("<green>¡La restricción del chat ha sido removida!</green>", PREFIX));
+            default:
+                break;
+        }
     }
 
     @CommandAlias("reportar")
