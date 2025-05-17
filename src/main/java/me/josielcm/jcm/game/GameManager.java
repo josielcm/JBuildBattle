@@ -131,25 +131,42 @@ public class GameManager {
             @Override
             public void run() {
                 if (countdown.get() <= 0) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 20");
-                    gameTask = new GameTask(3600); // 3600 
-                    gameTask.setMessage(FileManager.getMessages().getString("bossbar-timer"));
-                    gameTask.runTaskTimer(JBuildBattle.getInstance(), 0L, 20L);
-                    gameState = GameState.PLAYING;
-                    changeGameMode(GameMode.CREATIVE);
-                    PlayerManager.sendTitle("<color:#FFD04D><b>¡A construir!", "", 1, 5, 1);
-                    PlayerManager.playSound(Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 0.8f);
+                    new BukkitRunnable() {
+                        public void run() {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 20");
+                            gameTask = new GameTask(3600);
+                            gameTask.setMessage(FileManager.getMessages().getString("bossbar-timer"));
+                            gameTask.runTaskTimer(JBuildBattle.getInstance(), 0L, 20L);
+                            gameState = GameState.PLAYING;
+                            changeGameMode(GameMode.CREATIVE);
+                            PlayerManager.sendTitle("<color:#FFD04D><b>¡A construir!", "", 1, 5, 1);
+                            PlayerManager.playSound(Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 0.8f);
+                        };
+                    }.runTask(JBuildBattle.getInstance());
                     cancel();
-                    return;// "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "
+                    return;
                 }
 
                 if (countdown.get() <= 5) {
-                    PlayerManager.playSound(Sound.UI_BUTTON_CLICK, 1.0f, 1.0f);
+                    new BukkitRunnable() {
+                        public void run() {
+                            PlayerManager.playSound(Sound.UI_BUTTON_CLICK, 1.0f, 1.0f);
+                        };
+                    }.runTask(JBuildBattle.getInstance());
                 }
 
                 if (countdown.get() == 10) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 40");
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "cinematic start * cinematic_4238 480 80 1");
+                    new BukkitRunnable() {
+                        public void run() {
+                            try {
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 40");
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                        "cinematic start * cinematic_4238 480 80 1");
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        };
+                    }.runTask(JBuildBattle.getInstance());
                 }
 
                 BossBarManager.updateText(Color.parse("<color:#FFD04D><b>Iniciando en " + countdown.get() + "</b>"));
