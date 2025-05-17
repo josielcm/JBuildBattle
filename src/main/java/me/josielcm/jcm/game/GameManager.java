@@ -74,7 +74,8 @@ public class GameManager {
 
         if (world == null) {
             JBuildBattle.getInstance().getLogger()
-                    .severe("¡No se pudo encontrar el mundo '" + worldName + "'! Asegúrate de que existe o que esté bien escrito.");
+                    .severe("¡No se pudo encontrar el mundo '" + worldName
+                            + "'! Asegúrate de que existe o que esté bien escrito.");
             return;
         }
 
@@ -130,7 +131,8 @@ public class GameManager {
             @Override
             public void run() {
                 if (countdown.get() <= 0) {
-                    gameTask = new GameTask(60); // 3600 segundos (1 hora)
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 20");
+                    gameTask = new GameTask(3600); // 3600 
                     gameTask.setMessage(FileManager.getMessages().getString("bossbar-timer"));
                     gameTask.runTaskTimer(JBuildBattle.getInstance(), 0L, 20L);
                     gameState = GameState.PLAYING;
@@ -145,10 +147,15 @@ public class GameManager {
                     PlayerManager.playSound(Sound.UI_BUTTON_CLICK, 1.0f, 1.0f);
                 }
 
+                if (countdown.get() == 10) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 40");
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "cinematic start * cinematic_4238 480 80 1");
+                }
+
                 BossBarManager.updateText(Color.parse("<color:#FFD04D><b>Iniciando en " + countdown.get() + "</b>"));
                 countdown.decrementAndGet();
             }
-        }.runTaskTimer(JBuildBattle.getInstance(), 0L, 20L);
+        }.runTaskTimerAsynchronously(JBuildBattle.getInstance(), 0L, 20L);
     }
 
     public void stop() {

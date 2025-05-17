@@ -90,7 +90,7 @@ public class PlayerListener implements Listener {
         ev.setCancelled(true);
 
         if (isOnCooldown(player)) {
-            player.sendMessage(Color.parse("<red>¡Debes esperar para enviar otro mensaje!</red>"));
+            player.sendMessage(Color.parse("<red>¡Debes esperar para enviar otro mensaje!</red>", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
             return;
         }
 
@@ -115,7 +115,8 @@ public class PlayerListener implements Listener {
 
     private enum ChatFormat {
         ADMIN("<gold>", "<gray>"),
-        DEFAULT("<gray>", "<gray>");
+        PROS("<color:#5C93FC", "<gray>"),
+        DEFAULT("<color:#FC5C5C>", "<gray>");
 
         private final String nameColor;
         private final String messageColor;
@@ -138,6 +139,8 @@ public class PlayerListener implements Listener {
     private ChatFormat getChatFormat(Player player) {
         if (player.hasPermission("jbuildbattle.admin")) {
             return ChatFormat.ADMIN;
+        } else if (player.hasPermission("jbuildbattle.team.pro")) {
+            return ChatFormat.PROS;
         }
         return ChatFormat.DEFAULT;
     }

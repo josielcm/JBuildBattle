@@ -18,7 +18,6 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
-
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import lombok.Getter;
@@ -98,7 +97,8 @@ public class VoteManager {
     }
 
     public static void openVoteMenu(Player player) {
-        if (gui == null) return;
+        if (gui == null)
+            return;
 
         if (playersVoted.contains(player.getUniqueId())) {
             gui.close(player);
@@ -169,7 +169,8 @@ public class VoteManager {
         }
 
         addVote(theme, player.getUniqueId());
-        player.sendMessage(Color.parse("<green>¡Has votado por " + theme.getName() + "!", "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
+        player.sendMessage(Color.parse("<green>¡Has votado por " + theme.getName() + "!",
+                "<gradient:#FCD46D:#FCD369:#FCD265:#FCD160:#FCD05C:#FCD160:#FCD265><b>zEvento</b> <grey>»</grey> "));
         player.closeInventory();
     }
 
@@ -196,7 +197,7 @@ public class VoteManager {
                 gui.close(player);
                 return;
             }
-    
+
             Bukkit.getScheduler().runTaskLater(JBuildBattle.getInstance(), () -> {
                 try {
                     player.closeInventory();
@@ -215,20 +216,20 @@ public class VoteManager {
             Bukkit.getLogger().warning("No votes registered, returning NONE");
             return GameTheme.NONE;
         }
-    
+
         return votes.entrySet().stream()
-            .collect(Collectors.groupingBy(Map.Entry::getValue))
-            .entrySet().stream()
-            .max((entry1, entry2) -> Integer.compare(entry1.getKey(), entry2.getKey()))
-            .map(entry -> {
-                List<GameTheme> themes = entry.getValue().stream()
-                    .map(Map.Entry::getKey)
-                    .collect(Collectors.toList());
-                GameTheme winner = themes.get(new Random().nextInt(themes.size()));
-                Bukkit.getLogger().info("Winner theme selected: " + winner);
-                return winner;
-            })
-            .orElse(GameTheme.NONE);
+                .collect(Collectors.groupingBy(Map.Entry::getValue))
+                .entrySet().stream()
+                .max((entry1, entry2) -> Integer.compare(entry1.getKey(), entry2.getKey()))
+                .map(entry -> {
+                    List<GameTheme> themes = entry.getValue().stream()
+                            .map(Map.Entry::getKey)
+                            .collect(Collectors.toList());
+                    GameTheme winner = themes.get(new Random().nextInt(themes.size()));
+                    Bukkit.getLogger().info("Winner theme selected: " + winner);
+                    return winner;
+                })
+                .orElse(GameTheme.NONE);
     }
 
 }
