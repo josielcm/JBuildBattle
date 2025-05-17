@@ -125,7 +125,7 @@ public class GameManager {
         this.gameTheme = gameTheme;
         this.gameState = GameState.STARTING;
 
-        final AtomicInteger countdown = new AtomicInteger(25);
+        final AtomicInteger countdown = new AtomicInteger(35);
 
         task = new BukkitRunnable() {
             @Override
@@ -156,7 +156,7 @@ public class GameManager {
                                 canLeaveZone = true;
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 80");
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                        "cinematic start * cinematic_4238 480 80 1");
+                                        "cinematic start * cinematic_4238 960 80 1");
 
                             } catch (Exception ex) {
                                 ex.printStackTrace();

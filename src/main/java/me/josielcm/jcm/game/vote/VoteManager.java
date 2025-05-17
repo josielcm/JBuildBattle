@@ -63,7 +63,7 @@ public class VoteManager {
         openVoteMenu();
         voteTask = new VoteTask(30, voteMessage);
         voteTask.runTaskTimer(JBuildBattle.getInstance(), 0, 20);
-        PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f);
+        // PlayerManager.playSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f);
     }
 
     public static void stopVotes() {
