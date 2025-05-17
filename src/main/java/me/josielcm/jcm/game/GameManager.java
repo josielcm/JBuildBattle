@@ -125,7 +125,7 @@ public class GameManager {
         this.gameTheme = gameTheme;
         this.gameState = GameState.STARTING;
 
-        final AtomicInteger countdown = new AtomicInteger(60);
+        final AtomicInteger countdown = new AtomicInteger(50);
 
         task = new BukkitRunnable() {
             @Override
@@ -149,7 +149,7 @@ public class GameManager {
                     return;
                 }
 
-                if (countdown.get() == 60) {
+                if (countdown.get() == 50) {
                     new BukkitRunnable() {
                         public void run() {
 
